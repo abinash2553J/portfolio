@@ -80,4 +80,7 @@ function seo(): Plugin {
 
 export default defineConfig({
   plugins: [react(), seo()],
+  build: {
+    emptyOutDir: false,
+  },
 })

@@ -78,7 +78,7 @@ const typing = (t: EventTarget | null) =>
   t instanceof HTMLElement && (t.isContentEditable || t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.tagName === 'SELECT')
 
 // No g followed by h/w/o/a/c: that pair is a page-jump shortcut.
-const SECRETS = ['sakura', 'sudo', 'hire', 'kamehameha', 'nimbus', 'dracarys']
+const SECRETS = ['sakura', 'sudo', 'hire', 'kamehameha', 'nimbus', 'dracarys', 'ipod']
 
 export function useKeys(h: { palette: () => void; theme: () => void; sakura: () => void; secret: (word: string) => void; jump: (key: string) => boolean }) {
   const ref = useRef(h)

@@ -1,0 +1,390 @@
+/* ---------- iPod Classic Easter Egg ---------- */
+
+@font-face {
+  font-family: 'Chicago';
+  src: local('Chicago');
+  font-display: swap;
+}
+
+.ipod-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 55;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: color-mix(in srgb, var(--bg) 55%, transparent);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  animation: fade 0.2s ease both;
+}
+
+.ipod-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 36px;
+  height: 36px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--hover);
+  color: var(--muted);
+  font-size: 18px;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  transition: color 0.15s ease, background-color 0.15s ease;
+}
+
+.ipod-close:hover {
+  color: var(--ink);
+  background: var(--rule);
+}
+
+/* iPod shell */
+
+.ipod {
+  width: 250px;
+  background: linear-gradient(170deg, #e8e8e8 0%, #d4d4d4 20%, #c8c8c8 50%, #b8b8b8 80%, #a8a8a8 100%);
+  border-radius: 18px;
+  padding: 18px 18px 24px;
+  box-shadow:
+    0 2px 0 #f0f0f0 inset,
+    0 -1px 0 #888 inset,
+    1px 0 0 #bbb inset,
+    -1px 0 0 #bbb inset,
+    0 20px 60px -10px rgba(0, 0, 0, 0.45),
+    0 2px 8px rgba(0, 0, 0, 0.15);
+  animation: ipod-enter 0.5s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  user-select: none;
+}
+
+@keyframes ipod-enter {
+  from {
+    opacity: 0;
+    transform: translateY(24px) scale(0.92);
+  }
+}
+
+/* Screen */
+
+.ipod__screen {
+  width: 100%;
+  aspect-ratio: 1.28;
+  background: #bdd2b6;
+  border-radius: 6px;
+  border: 2px solid #666;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  font-family: 'Chicago', 'Geneva', 'Lucida Grande', 'Helvetica Neue', sans-serif;
+  image-rendering: auto;
+  position: relative;
+}
+
+:root[data-theme='dark'] .ipod__screen {
+  background: #9fb896;
+}
+
+/* Screen header */
+
+.ipod__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 4px 6px 3px;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  color: #1a1a1a;
+  border-bottom: 1.5px solid #8aad80;
+}
+
+.ipod__header-title {
+  flex: 1;
+  text-align: center;
+}
+
+.ipod__battery {
+  width: 16px;
+  height: 8px;
+  border: 1px solid #1a1a1a;
+  border-radius: 1px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding: 1px;
+}
+
+.ipod__battery::after {
+  content: '';
+  position: absolute;
+  right: -3px;
+  top: 2px;
+  width: 2px;
+  height: 4px;
+  background: #1a1a1a;
+  border-radius: 0 1px 1px 0;
+}
+
+.ipod__battery-fill {
+  width: 75%;
+  height: 100%;
+  background: #1a1a1a;
+  border-radius: 0.5px;
+}
+
+/* Menu list */
+
+.ipod__menu {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.ipod__menu-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 3px 8px;
+  font-size: 10px;
+  font-weight: 500;
+  color: #1a1a1a;
+  cursor: default;
+  white-space: nowrap;
+  line-height: 1.6;
+}
+
+.ipod__menu-item[data-sel] {
+  background: #3b5998;
+  color: #fff;
+}
+
+.ipod__menu-arrow {
+  font-size: 9px;
+  opacity: 0.6;
+}
+
+.ipod__menu-item[data-sel] .ipod__menu-arrow {
+  opacity: 1;
+}
+
+/* Now Playing screen */
+
+.ipod__now-playing {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 8px;
+  text-align: center;
+}
+
+.ipod__song-num {
+  font-size: 8px;
+  color: #333;
+  margin-bottom: 2px;
+}
+
+.ipod__song-title {
+  font-size: 10px;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-bottom: 1px;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ipod__song-artist {
+  font-size: 9px;
+  color: #333;
+  margin-bottom: 1px;
+}
+
+.ipod__song-album {
+  font-size: 8px;
+  color: #555;
+  margin-bottom: 6px;
+}
+
+.ipod__progress-bar {
+  width: 85%;
+  height: 5px;
+  background: #9fb896;
+  border: 1px solid #6a8a60;
+  border-radius: 2px;
+  overflow: hidden;
+  margin-bottom: 3px;
+}
+
+.ipod__progress-fill {
+  height: 100%;
+  background: #3b5998;
+  transition: width 0.3s linear;
+}
+
+.ipod__time-row {
+  display: flex;
+  justify-content: space-between;
+  width: 85%;
+  font-size: 7px;
+  color: #333;
+}
+
+/* About screen */
+
+.ipod__about {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 10px;
+  text-align: center;
+  gap: 2px;
+}
+
+.ipod__about-line {
+  font-size: 9px;
+  color: #1a1a1a;
+  line-height: 1.5;
+}
+
+.ipod__about-line:first-child {
+  font-weight: 700;
+  font-size: 10px;
+  margin-bottom: 2px;
+}
+
+.ipod__about-line em {
+  font-style: normal;
+  color: #555;
+}
+
+/* Click wheel */
+
+.ipod__wheel {
+  width: 170px;
+  height: 170px;
+  margin: 20px auto 0;
+  background: #e2e2e2;
+  border-radius: 50%;
+  position: relative;
+  display: grid;
+  place-items: center;
+  box-shadow:
+    0 1px 3px rgba(0, 0, 0, 0.12) inset,
+    0 -1px 1px rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  touch-action: none;
+}
+
+.ipod__wheel-labels {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  font-family: 'Chicago', 'Geneva', sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  color: #666;
+  letter-spacing: 0.04em;
+}
+
+.ipod__wheel-label {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ipod__wheel-label--menu {
+  top: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.ipod__wheel-label--fwd {
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 13px;
+}
+
+.ipod__wheel-label--rev {
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 13px;
+}
+
+.ipod__wheel-label--play {
+  bottom: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 11px;
+  gap: 2px;
+}
+
+/* Select button (center) */
+
+.ipod__select {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  border: 0;
+  background: linear-gradient(170deg, #e8e8e8 0%, #d4d4d4 50%, #c0c0c0 100%);
+  box-shadow:
+    0 1px 3px rgba(0, 0, 0, 0.1),
+    0 1px 0 rgba(255, 255, 255, 0.6) inset;
+  cursor: pointer;
+  position: relative;
+  z-index: 2;
+  transition: transform 0.08s ease;
+}
+
+.ipod__select:active {
+  transform: scale(0.95);
+}
+
+/* Wheel click animation */
+
+.ipod__wheel-flash {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  pointer-events: none;
+  animation: wheel-flash 0.15s ease-out both;
+}
+
+@keyframes wheel-flash {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+/* Responsive */
+
+@media (max-height: 600px) {
+  .ipod {
+    transform: scale(0.85);
+    transform-origin: center;
+  }
+}
+
+@media (max-width: 360px) {
+  .ipod {
+    width: 220px;
+  }
+  .ipod__wheel {
+    width: 150px;
+    height: 150px;
+  }
+  .ipod__select {
+    width: 52px;
+    height: 52px;
+  }
+}

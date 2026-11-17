@@ -1,6 +1,7 @@
 import { useEffect, useLayoutEffect, useMemo, useState } from 'react'
 import { flushSync } from 'react-dom'
 import { Dragon, Nimbus, Palette, Toaster, greetConsole, isMac, summon, toast, useKeys, usePetals, useProgress, useReveal, type Command } from './fx'
+import { IpodClassic } from './Ipod'
 import { RoveDemo } from './demos/Rove'
 import { VectorDemo } from './demos/Vector'
 import { LeakLensDemo } from './demos/LeakLens'
@@ -105,6 +106,7 @@ function Page() {
   const time = useIST()
   const asleep = Number(time.slice(0, 2)) < 6
   const [palette, setPalette] = useState(false)
+  const [ipod, setIpod] = useState(false)
   const petals = usePetals()
   useReveal(path)
   useProgress(path)
@@ -141,6 +143,10 @@ function Page() {
       if (w === 'kamehameha' || w === 'nimbus') nimbus()
       if (w === 'dracarys') dragon()
       if (w === 'sudo') toast('sudo: you are not in the sudoers file. Email works though.')
+      if (w === 'ipod') {
+        setIpod(true)
+        toast('Click wheel activated. Scroll to navigate.')
+      }
       if (w === 'hire') {
         navigate('/contact')
         toast('Excellent taste. Taking you to contact.')
@@ -170,6 +176,7 @@ function Page() {
       { id: 'nimbus', group: 'Secrets', label: 'Call the Flying Nimbus', keywords: 'goku kamehameha dragon ball dbz easter egg', run: nimbus },
       { id: 'dragon', group: 'Secrets', label: 'Wake the dragon', keywords: 'dragon dracarys skyline fly easter egg', run: dragon },
       { id: 'duel', group: 'Secrets', label: 'Get lost', keywords: '404 luffy crocodile one piece duel easter egg', run: () => navigate('/lost') },
+      { id: 'ipod', group: 'Secrets', label: 'Open the iPod', keywords: 'ipod classic music click wheel apple retro easter egg', run: () => { setIpod(true); toast('Click wheel activated. Scroll to navigate.') } },
     ],
     [], // eslint-disable-line react-hooks/exhaustive-deps
   )
@@ -238,6 +245,7 @@ function Page() {
       <Palette open={palette} onClose={() => setPalette(false)} commands={commands} />
       <Nimbus />
       <Toaster />
+      {ipod && <IpodClassic onClose={() => setIpod(false)} />}
     </>
   )
 }
