@@ -24,7 +24,7 @@ function head(p: PageMeta) {
   const title = esc(fullTitle(p.title))
   const desc = esc(p.description)
   const url = `${origin}${p.path}`
-  const image = `${origin}/og/${p.og}.png`
+  const image = `${origin}/og/${p.og}.jpg`
   return [
     `<title>${title}</title>`,
     `<meta name="description" content="${desc}" />`,
@@ -35,6 +35,7 @@ function head(p: PageMeta) {
     `<meta property="og:description" content="${desc}" />`,
     origin && `<meta property="og:url" content="${url}" />`,
     `<meta property="og:image" content="${image}" />`,
+    `<meta property="og:image:type" content="image/jpeg" />`,
     `<meta property="og:image:width" content="1200" />`,
     `<meta property="og:image:height" content="630" />`,
     `<meta property="og:image:alt" content="${esc(p.heading)} — ${esc(p.eyebrow)}" />`,

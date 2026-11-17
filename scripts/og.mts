@@ -1,4 +1,4 @@
-// Renders public/og/*.png share images and public/apple-touch-icon.png.
+// Renders public/og/*.jpg share images and public/apple-touch-icon.png.
 // Run: CHROME_PATH=... node scripts/og.mts
 import { chromium } from 'playwright-core'
 import { mkdirSync, readFileSync } from 'node:fs'
@@ -34,7 +34,7 @@ mkdirSync('public/og', { recursive: true })
 for (const p of PAGES) {
   await page.setContent(card(p), { waitUntil: 'networkidle' })
   await page.evaluate(() => document.fonts.ready)
-  await page.screenshot({ path: `public/og/${p.og}.png` })
+  await page.screenshot({ path: `public/og/${p.og}.jpg`, type: 'jpeg', quality: 82 })
 }
 await page.setViewportSize({ width: 180, height: 180 })
 await page.setContent(`<body style="margin:0">${readFileSync('public/favicon.svg', 'utf8').replace('<svg ', '<svg width="180" height="180" ').replace('rx="8"', '')}</body>`)

@@ -25,7 +25,7 @@ Import the repo on Vercel; no settings are needed. Absolute URLs in link preview
 
 ## Share images
 
-`public/og/*.png` and `public/apple-touch-icon.png` are generated from `src/meta.ts`. After changing page copy:
+`public/og/*.jpg` and `public/apple-touch-icon.png` are generated from `src/meta.ts`. After changing page copy:
 
 ```bash
 CHROME_PATH=/path/to/chrome node scripts/og.mts
