@@ -1,6 +1,6 @@
 import { useEffect, useLayoutEffect, useMemo, useState } from 'react'
 import { flushSync } from 'react-dom'
-import { Palette, Toaster, greetConsole, isMac, toast, useKeys, usePetals, useProgress, useReveal, type Command } from './fx'
+import { Dragon, Nimbus, Palette, Toaster, greetConsole, isMac, summon, toast, useKeys, usePetals, useProgress, useReveal, type Command } from './fx'
 import { RoveDemo } from './demos/Rove'
 import { VectorDemo } from './demos/Vector'
 import { LeakLensDemo } from './demos/LeakLens'
@@ -118,6 +118,15 @@ function Page() {
     petals()
     toast('You found the sakura. Nice.')
   }
+  const nimbus = () => {
+    summon('nimbus')
+    toast('Flying Nimbus, landing. Power level: over 9000.')
+  }
+  const dragon = () => {
+    scrollTo({ top: document.documentElement.scrollHeight, behavior: 'smooth' })
+    setTimeout(() => summon('dragon'), 700)
+    toast('Something is crossing the skyline.')
+  }
 
   useKeys({
     palette: () => setPalette((p) => !p),
@@ -129,6 +138,8 @@ function Page() {
       return true
     },
     secret: (w) => {
+      if (w === 'kamehameha' || w === 'nimbus') nimbus()
+      if (w === 'dracarys') dragon()
       if (w === 'sudo') toast('sudo: you are not in the sudoers file. Email works though.')
       if (w === 'hire') {
         navigate('/contact')
@@ -156,6 +167,9 @@ function Page() {
       { id: 'rove-live', group: 'Links', label: 'Rove, live demo', hint: '↗', keywords: 'trip planner', run: () => openTab('https://rove-rust.vercel.app') },
       ...FEATURED.map((f) => ({ id: `src-${f.slug}`, group: 'Links', label: `${f.name}, source`, hint: '↗', keywords: f.kind, run: () => openTab(f.links[f.links.length - 1].href) })),
       { id: 'sakura', group: 'Secrets', label: 'Let it bloom', keywords: 'sakura petals cherry easter egg', run: sakura },
+      { id: 'nimbus', group: 'Secrets', label: 'Call the Flying Nimbus', keywords: 'goku kamehameha dragon ball dbz easter egg', run: nimbus },
+      { id: 'dragon', group: 'Secrets', label: 'Wake the dragon', keywords: 'dragon dracarys skyline fly easter egg', run: dragon },
+      { id: 'duel', group: 'Secrets', label: 'Get lost', keywords: '404 luffy crocodile one piece duel easter egg', run: () => navigate('/lost') },
     ],
     [], // eslint-disable-line react-hooks/exhaustive-deps
   )
@@ -202,6 +216,7 @@ function Page() {
       <footer className="footer">
         <div className="skyline" onClick={(e) => petals({ x: e.clientX, y: e.clientY })}>
           <img src="/footer-skyline.webp" alt="" width={1600} height={625} loading="lazy" />
+          <Dragon />
         </div>
         <div className="footer__bar">
           <span>
@@ -221,6 +236,7 @@ function Page() {
       </footer>
 
       <Palette open={palette} onClose={() => setPalette(false)} commands={commands} />
+      <Nimbus />
       <Toaster />
     </>
   )

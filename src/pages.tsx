@@ -302,9 +302,12 @@ export function About() {
   useTitle('About')
   return (
     <>
-      <PageHead index="03" label="About" title="About">
-        Software engineer in training, working where reliable systems, machine-learning pipelines and low-level code overlap.
-      </PageHead>
+      <div className="about-head">
+        <img className="about-head__art" src="/art/pagoda.webp" alt="" width={460} height={538} />
+        <PageHead index="03" label="About" title="About">
+          Software engineer in training, working where reliable systems, machine-learning pipelines and low-level code overlap.
+        </PageHead>
+      </div>
       <div className="about" data-reveal>
         <p className="about__lead">
           I&rsquo;m a dual-degree student, reading Data Science &amp; Applications at <strong>IIT Madras</strong> and Computer Science at{' '}
@@ -382,6 +385,10 @@ export function NotFound() {
       <p className="pagehead__intro">
         <code>{location.pathname}</code> doesn&rsquo;t exist. Try the <Link to="/">home page</Link>, or press <kbd>/</kbd> to search.
       </p>
+      <figure className="duel">
+        <img src="/art/duel.gif" alt="Pixel-art Luffy and Crocodile fighting" width={400} height={300} />
+        <figcaption>Meanwhile, Luffy is settling it the old-fashioned way.</figcaption>
+      </figure>
     </div>
   )
 }

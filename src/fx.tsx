@@ -77,6 +77,9 @@ const KONAMI = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'Ar
 const typing = (t: EventTarget | null) =>
   t instanceof HTMLElement && (t.isContentEditable || t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.tagName === 'SELECT')
 
+// No g followed by h/w/o/a/c: that pair is a page-jump shortcut.
+const SECRETS = ['sakura', 'sudo', 'hire', 'kamehameha', 'nimbus', 'dracarys']
+
 export function useKeys(h: { palette: () => void; theme: () => void; sakura: () => void; secret: (word: string) => void; jump: (key: string) => boolean }) {
   const ref = useRef(h)
   ref.current = h
@@ -110,15 +113,13 @@ export function useKeys(h: { palette: () => void; theme: () => void; sakura: () 
       }
       gAt = e.key === 'g' ? Date.now() : 0
       buf = (buf + e.key.toLowerCase()).slice(-12)
-      if (buf.endsWith('sakura')) {
+      const word = SECRETS.find((w) => buf.endsWith(w))
+      if (word === 'sakura') {
         buf = ''
         ref.current.sakura()
-      } else if (buf.endsWith('sudo')) {
+      } else if (word) {
         buf = ''
-        ref.current.secret('sudo')
-      } else if (buf.endsWith('hire')) {
-        buf = ''
-        ref.current.secret('hire')
+        ref.current.secret(word)
       } else if (e.key === 't') {
         ref.current.theme()
       }
@@ -191,6 +192,59 @@ export function usePetals() {
     }
     requestAnimationFrame(frame)
   }
+}
+
+/* ---------- Summons: the skyline dragon and the Flying Nimbus ---------- */
+
+type Summon = 'dragon' | 'nimbus'
+export const summon = (what: Summon) => dispatchEvent(new CustomEvent<Summon>('summon', { detail: what }))
+const calm = () => matchMedia('(prefers-reduced-motion: reduce)').matches
+
+function useSummon(what: Summon, run: () => void) {
+  const ref = useRef(run)
+  ref.current = run
+  useEffect(() => {
+    const on = (e: Event) => (e as CustomEvent<Summon>).detail === what && ref.current()
+    addEventListener('summon', on)
+    return () => removeEventListener('summon', on)
+  }, [what])
+}
+
+export function Dragon() {
+  const ref = useRef<HTMLDivElement>(null)
+  const last = useRef(0)
+  const [flight, setFlight] = useState(0)
+  const fly = () => {
+    if (calm()) return
+    last.current = Date.now()
+    setFlight((f) => f + 1)
+  }
+  useSummon('dragon', fly)
+  useEffect(() => {
+    const io = new IntersectionObserver(([e]) => e.isIntersecting && Date.now() - last.current > 25000 && fly(), { threshold: 0.5 })
+    io.observe(ref.current!.parentElement!)
+    return () => io.disconnect()
+  }, [])
+  return (
+    <div ref={ref} className="dragon" aria-hidden="true">
+      {flight > 0 && (
+        <span key={flight} className="dragon__flight" onAnimationEnd={(e) => e.target === e.currentTarget && setFlight(0)}>
+          <img src="/art/dragon.webp" alt="" width={260} height={294} />
+        </span>
+      )}
+    </div>
+  )
+}
+
+export function Nimbus() {
+  const [at, setAt] = useState(0)
+  useSummon('nimbus', () => !calm() && setAt(Date.now()))
+  useEffect(() => {
+    if (!at) return
+    const t = setTimeout(() => setAt(0), 2600)
+    return () => clearTimeout(t)
+  }, [at])
+  return at ? <img className="nimbus" src={`/art/goku.gif?t=${at}`} alt="" width={300} height={300} aria-hidden="true" /> : null
 }
 
 /* ---------- Command palette ---------- */
@@ -315,7 +369,7 @@ export function greetConsole(email: string) {
     'font: 13px ui-sans-serif, system-ui; color: #7a7873',
   )
   console.log(
-    `%cThis site is React + TypeScript, with product demos built on stageshow.\nIf you read consoles for fun, we should talk: ${email}\n\nTry ⌘K, g then w/o/a/c to jump between pages, the Konami code, or just type "sakura".`,
+    `%cThis site is React + TypeScript, with product demos built on stageshow.\nIf you read consoles for fun, we should talk: ${email}\n\nTry ⌘K, g then w/o/a/c to jump between pages, the Konami code, or type "sakura", "nimbus" or "dracarys".`,
     'font: 12px ui-monospace, Menlo, monospace; color: #7a7873; line-height: 1.6',
   )
 }
