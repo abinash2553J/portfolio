@@ -1,0 +1,68 @@
+.ll .ll-win {
+  position: absolute;
+  top: 28px;
+  left: 28px;
+  width: 700px;
+  height: 340px;
+}
+
+.ll .ll-term {
+  height: 100%;
+  padding-top: 4px;
+}
+
+/* Earlier output: dissolves upward as the scan starts, like a scroll */
+.ll .ll-history {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding-bottom: 8px;
+  font-size: 12px;
+}
+
+.ll .ll-line {
+  white-space: pre;
+}
+
+.ll .ll-find {
+  display: grid;
+  grid-template-columns: 6ch 26ch auto;
+}
+
+.ll .ll-path {
+  color: #e4e4e8;
+}
+
+.ll .ll-summary {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding-top: 10px;
+}
+
+.ll .ll-summary .ll-line:first-child {
+  color: #e4e4e8;
+}
+
+.ll .ll-next {
+  margin-top: 8px;
+}
+
+.ll .ss-stage[data-layout='compact'] .ll-win {
+  top: 16px;
+  left: 16px;
+  width: 380px;
+  height: 340px;
+}
+
+.ll .ss-stage[data-layout='compact'] .ll-term {
+  font-size: 11px;
+}
+
+.ll .ss-stage[data-layout='compact'] .ll-find {
+  grid-template-columns: 5ch 16ch;
+}
+
+.ll .ss-stage[data-layout='compact'] .ll-find > :last-child {
+  grid-column: 2;
+}

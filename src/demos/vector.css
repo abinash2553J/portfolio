@@ -1,0 +1,124 @@
+.vc .vc-win {
+  position: absolute;
+  top: 28px;
+  left: 28px;
+  width: 700px;
+  height: 400px;
+}
+
+.vc .vc-body {
+  display: grid;
+  grid-template-columns: 236px 1fr;
+  height: 100%;
+  background: var(--ss-surface);
+}
+
+.vc .vc-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 10px 8px;
+  border-right: 1px solid var(--ss-line);
+  background: var(--ss-canvas);
+}
+
+.vc .vc-row {
+  border-radius: 8px;
+}
+
+.vc .vc-row[data-selected] {
+  background: var(--ss-accent-soft);
+}
+
+.vc .vc-role {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--ss-text-strong);
+}
+
+.vc .vc-score {
+  font-size: 11.5px;
+  font-variant-numeric: tabular-nums;
+  color: var(--ss-text);
+}
+
+.vc .vc-detail {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  width: 380px;
+  padding: 20px 24px;
+}
+
+.vc .vc-detail__head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.vc .vc-title {
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--ss-text-strong);
+}
+
+.vc .vc-why {
+  font-size: 12.5px;
+  line-height: 1.55;
+  color: var(--ss-text);
+}
+
+.vc .vc-skills {
+  display: grid;
+  gap: 14px;
+  padding-top: 16px;
+  border-top: 1px solid var(--ss-line);
+}
+
+.vc .vc-skill {
+  display: grid;
+  gap: 7px;
+}
+
+.vc .vc-skill__name {
+  font-size: 11.5px;
+  font-weight: 500;
+  color: var(--ss-text-strong);
+}
+
+/* Compact: the detail is the story; the list narrows to a rail beside it */
+.vc .ss-stage[data-layout='compact'] .vc-win {
+  top: 16px;
+  left: 16px;
+  width: 380px;
+  height: 360px;
+}
+
+.vc .ss-stage[data-layout='compact'] .vc-why-states {
+  display: none;
+}
+
+.vc .ss-stage[data-layout='compact'] .vc-skills {
+  padding-top: 14px;
+}
+
+.vc .ss-stage[data-layout='compact'] .vc-body {
+  grid-template-columns: 1fr;
+  grid-template-rows: auto 1fr;
+}
+
+.vc .ss-stage[data-layout='compact'] .vc-list {
+  width: 342px;
+  border-right: 0;
+  border-bottom: 1px solid var(--ss-line);
+}
+
+.vc .ss-stage[data-layout='compact'] .vc-list > :nth-child(n + 3) {
+  display: none;
+}
+
+.vc .ss-stage[data-layout='compact'] .vc-detail {
+  width: 342px;
+  padding: 16px;
+}

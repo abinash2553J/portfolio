@@ -1,0 +1,352 @@
+import type { Theme } from './App'
+import { EMAIL, FEATURED, GITHUB, LINKEDIN, MORE, UPSTREAM } from './content'
+import { Link } from './router'
+import { Arrow, CopyEmail, PageHead, Section, useTitle } from './ui'
+
+const ext = { target: '_blank', rel: 'noreferrer' }
+const num = (i: number) => String(i + 1).padStart(2, '0')
+
+function ExtLinks({ links }: { links: { label: string; href: string }[] }) {
+  return (
+    <div className="project__links">
+      {links.map((l) => (
+        <a key={l.label} href={l.href} {...ext}>
+          {l.label} <Arrow />
+        </a>
+      ))}
+    </div>
+  )
+}
+
+function More({ to, children }: { to: string; children: React.ReactNode }) {
+  return (
+    <Link to={to} className="more-link" data-reveal>
+      {children} <Arrow dir="e" />
+    </Link>
+  )
+}
+
+function UpstreamList({ items }: { items: typeof UPSTREAM }) {
+  return (
+    <ul className="upstream">
+      {items.map((u, i) => (
+        <li key={u.href} data-reveal style={{ '--d': `${i * 70}ms` } as React.CSSProperties}>
+          <a href={u.href} {...ext} className="upstream__row">
+            <span className="upstream__repo">{u.repo}</span>
+            <span className="upstream__title">{u.title}</span>
+            <span className="upstream__ref">
+              {u.ref} <Arrow />
+            </span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  )
+}
+
+/* ---------- Home ---------- */
+
+export function Home({ time }: { time: string }) {
+  useTitle()
+  return (
+    <>
+      <header className="hero">
+        <h1 className="hero__name">Abinash Karan</h1>
+        <p className="hero__role">Software Engineer · AI &amp; Systems</p>
+        <p className="hero__statement">
+          I build software where machine learning meets real systems, and I read the source before I trust the abstraction.
+        </p>
+        <div className="hero__meta">
+          <span className="meta">
+            Odisha, India <span className="sep">·</span> {time} IST
+          </span>
+          <span className="status">
+            <span className="status__dot" />
+            Open to SWE internships
+          </span>
+        </div>
+        <div className="hero__links">
+          <a href={GITHUB} {...ext}>
+            GitHub <Arrow />
+          </a>
+          <a href={LINKEDIN} {...ext}>
+            LinkedIn <Arrow />
+          </a>
+          <a href={`mailto:${EMAIL}`}>
+            Email <Arrow />
+          </a>
+        </div>
+      </header>
+
+      <Section index="01" label="Selected work" aside={<Link to="/work">All work</Link>}>
+        <ul className="index">
+          {FEATURED.map((f, i) => (
+            <li key={f.slug} data-reveal style={{ '--d': `${i * 70}ms` } as React.CSSProperties}>
+              <Link to={`/work/${f.slug}`} className="index__row">
+                <span className="index__num">{num(i)}</span>
+                <span className="index__name">{f.name}</span>
+                <span className="index__desc">{f.tagline}</span>
+                <Arrow dir="e" />
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </Section>
+
+      <Section index="02" label="Open source" aside={<Link to="/open-source">All contributions</Link>}>
+        <UpstreamList items={UPSTREAM.slice(0, 2)} />
+      </Section>
+
+      <Section index="03" label="Now">
+        <p className="now" data-reveal>
+          Dual-degree student at <strong>IIT Madras</strong> and <strong>BITS Pilani</strong>, reading <em>Designing Data-Intensive Applications</em>,
+          and looking for a software engineering internship.
+        </p>
+        <div className="row-links">
+          <More to="/about">More about me</More>
+          <More to="/contact">Get in touch</More>
+        </div>
+      </Section>
+    </>
+  )
+}
+
+/* ---------- Work ---------- */
+
+export function Work({ theme }: { theme: Theme }) {
+  useTitle('Work')
+  return (
+    <>
+      <PageHead index="01" label="Work" title="Selected work">
+        Three products I designed and built end to end, and the engineering decisions behind them.
+      </PageHead>
+      <div className="work">
+        {FEATURED.map(({ slug, name, kind, summary, stack, links, Demo }, i) => (
+          <article key={slug} className="project" data-reveal>
+            <div className="project__visual">
+              <Demo theme={theme} />
+            </div>
+            <div className="project__body">
+              <div className="project__head">
+                <h2 className="project__title">
+                  <span className="project__num">{num(i)}</span>
+                  <Link to={`/work/${slug}`} className="project__name">
+                    {name}
+                  </Link>
+                  <span className="project__kind">{kind}</span>
+                </h2>
+                <ExtLinks links={links} />
+              </div>
+              <p className="project__summary">{summary}</p>
+              <ul className="stack">
+                {stack.map((s) => (
+                  <li key={s}>{s}</li>
+                ))}
+              </ul>
+              <Link to={`/work/${slug}`} className="more-link more-link--tight">
+                Read the case study <Arrow dir="e" />
+              </Link>
+            </div>
+          </article>
+        ))}
+      </div>
+
+      <div className="more" data-reveal>
+        <p className="label more__label">Also</p>
+        {MORE.map((p) => (
+          <div key={p.name} className="more__row">
+            <div className="more__title">
+              {p.name}
+              <span className="project__kind">{p.kind}</span>
+            </div>
+            <p className="more__summary">{p.summary}</p>
+            <p className="more__stack">{p.stack}</p>
+          </div>
+        ))}
+      </div>
+    </>
+  )
+}
+
+/* ---------- Case study ---------- */
+
+export function CaseStudy({ slug, theme }: { slug: string; theme: Theme }) {
+  const i = FEATURED.findIndex((f) => f.slug === slug)
+  const f = FEATURED[i]
+  useTitle(f?.name ?? 'Not found')
+  if (!f) return <NotFound />
+  const prev = FEATURED[(i - 1 + FEATURED.length) % FEATURED.length]
+  const next = FEATURED[(i + 1) % FEATURED.length]
+  const { Demo } = f
+  return (
+    <article className="case">
+      <Link to="/work" className="back">
+        <Arrow dir="w" /> All work
+      </Link>
+      <PageHead index={num(i)} label={f.kind} title={f.name}>
+        {f.lede}
+      </PageHead>
+      <dl className="case__meta">
+        <div>
+          <dt>Type</dt>
+          <dd>{f.kind}</dd>
+        </div>
+        <div>
+          <dt>Stack</dt>
+          <dd>{f.stack.join(', ')}</dd>
+        </div>
+        <div>
+          <dt>Links</dt>
+          <dd>
+            <ExtLinks links={f.links} />
+          </dd>
+        </div>
+      </dl>
+      <div className="case__visual">
+        <Demo theme={theme} />
+      </div>
+      <Section label="What it does">
+        <ul className="points">
+          {f.built.map((b, j) => (
+            <li key={j} data-reveal style={{ '--d': `${j * 50}ms` } as React.CSSProperties}>
+              {b}
+            </li>
+          ))}
+        </ul>
+      </Section>
+      <Section label="Engineering notes">
+        <ol className="points points--num">
+          {f.notes.map((n, j) => (
+            <li key={j} data-reveal style={{ '--d': `${j * 50}ms` } as React.CSSProperties}>
+              <span className="points__n">{num(j)}</span>
+              {n}
+            </li>
+          ))}
+        </ol>
+      </Section>
+      <nav className="pager" aria-label="More projects">
+        <Link to={`/work/${prev.slug}`} className="pager__link">
+          <span className="label">
+            <Arrow dir="w" /> Previous
+          </span>
+          <span className="pager__name">{prev.name}</span>
+        </Link>
+        <Link to={`/work/${next.slug}`} className="pager__link pager__link--next">
+          <span className="label">
+            Next <Arrow dir="e" />
+          </span>
+          <span className="pager__name">{next.name}</span>
+        </Link>
+      </nav>
+    </article>
+  )
+}
+
+/* ---------- Open source ---------- */
+
+export function OpenSource() {
+  useTitle('Open source')
+  return (
+    <>
+      <PageHead index="02" label="Open source" title="Upstream">
+        Fixes I&rsquo;ve sent to projects I use. Most started as a bug I hit, then a read through the source to find where the assumption broke.
+      </PageHead>
+      <UpstreamList items={UPSTREAM} />
+      <div className="row-links">
+        <a href={GITHUB} {...ext} className="more-link" data-reveal>
+          Everything else on GitHub <Arrow />
+        </a>
+      </div>
+    </>
+  )
+}
+
+/* ---------- About ---------- */
+
+export function About() {
+  useTitle('About')
+  return (
+    <>
+      <PageHead index="03" label="About" title="About">
+        Software engineer in training, working where reliable systems, machine-learning pipelines and low-level code overlap.
+      </PageHead>
+      <div className="about" data-reveal>
+        <p className="about__lead">
+          I&rsquo;m a dual-degree student, reading Data Science &amp; Applications at <strong>IIT Madras</strong> and Computer Science at{' '}
+          <strong>BITS Pilani</strong>.
+        </p>
+        <p>
+          I learn by reading source code, weighing the trade-offs in distributed systems, and shipping software people actually use. When a
+          library surprises me, I&rsquo;d rather find the line that caused it than work around it, which is how most of my{' '}
+          <Link to="/open-source">open-source fixes</Link> started.
+        </p>
+        <dl className="facts">
+          <div>
+            <dt>Education</dt>
+            <dd>IIT Madras, Data Science &amp; Applications. BITS Pilani, Computer Science.</dd>
+          </div>
+          <div>
+            <dt>Exploring</dt>
+            <dd>Distributed systems, storage engines, retrieval-augmented generation, database internals.</dd>
+          </div>
+          <div>
+            <dt>Reading</dt>
+            <dd>
+              <em>Designing Data-Intensive Applications</em> (Kleppmann) and <em>SICP</em> (Abelson &amp; Sussman).
+            </dd>
+          </div>
+          <div>
+            <dt>Works with</dt>
+            <dd>Python, TypeScript, React, Next.js, FastAPI, PostgreSQL, XGBoost.</dd>
+          </div>
+        </dl>
+      </div>
+      <div className="row-links">
+        <More to="/work">See the work</More>
+        <More to="/contact">Get in touch</More>
+      </div>
+    </>
+  )
+}
+
+/* ---------- Contact ---------- */
+
+export function Contact({ time, asleep }: { time: string; asleep: boolean }) {
+  useTitle('Contact')
+  return (
+    <>
+      <PageHead index="04" label="Contact" title="Building something thoughtful?">
+        I&rsquo;m looking for software engineering internships and serious collaborative projects. Email is the fastest way to reach me.
+      </PageHead>
+      <div className="contact" data-reveal>
+        <div className="contact__actions">
+          <CopyEmail />
+          <a href={GITHUB} {...ext}>
+            github/abinash2553J <Arrow />
+          </a>
+          <a href={LINKEDIN} {...ext}>
+            in/abinash-karan <Arrow />
+          </a>
+        </div>
+        <p className="contact__note">
+          It&rsquo;s {time} in Odisha{asleep ? ', so I’m probably asleep. Expect a reply in the morning.' : '. I usually reply within a day.'}
+        </p>
+      </div>
+    </>
+  )
+}
+
+/* ---------- 404 ---------- */
+
+export function NotFound() {
+  useTitle('Not found')
+  return (
+    <div className="notfound">
+      <p className="label">404</p>
+      <h1 className="pagehead__title">This page wandered off.</h1>
+      <p className="pagehead__intro">
+        <code>{location.pathname}</code> doesn&rsquo;t exist. Try the <Link to="/">home page</Link>, or press <kbd>/</kbd> to search.
+      </p>
+    </div>
+  )
+}
