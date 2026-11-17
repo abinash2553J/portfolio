@@ -2,6 +2,7 @@ import { useEffect, useLayoutEffect, useMemo, useState } from 'react'
 import { flushSync } from 'react-dom'
 import { Dragon, Nimbus, Palette, Toaster, greetConsole, isMac, summon, toast, useKeys, usePetals, useProgress, useReveal, type Command } from './fx'
 import { IpodClassic } from './Ipod'
+import { QuotesSection } from './Quotes'
 import { RoveDemo } from './demos/Rove'
 import { VectorDemo } from './demos/Vector'
 import { LeakLensDemo } from './demos/LeakLens'
@@ -222,6 +223,8 @@ function Page() {
       <main id="main" key={path} className={`page route${path === '/' ? '' : ' page--inner'}`}>
         <Route path={path} theme={theme} time={time} asleep={asleep} />
       </main>
+
+      <QuotesSection />
 
       <footer className="footer">
         <div className="skyline" onClick={(e) => petals({ x: e.clientX, y: e.clientY })}>

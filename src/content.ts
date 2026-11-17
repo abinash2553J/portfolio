@@ -217,3 +217,43 @@ export const NAV = [
   { path: '/about', label: 'About', key: 'a' },
   { path: '/contact', label: 'Contact', key: 'c' },
 ]
+
+export type Quote = {
+  quote: string
+  author?: string
+}
+
+export const QUOTES: Quote[] = [
+  { quote: 'A man who is master of patience is master of everything else.', author: 'George Savile' },
+  { quote: 'Man is made by his belief. As he believes, so he is.', author: 'Bhagavad Gita' },
+  { quote: 'Make the simple path feel inevitable.' },
+  { quote: 'Good systems leave room for better questions.' },
+  { quote: 'Build small enough to learn, then strong enough to last.' },
+  { quote: 'Clarity is a feature, not a finishing touch.' },
+  { quote: 'The best projects make curiosity practical.' },
+  { quote: 'Humankind cannot gain anything without first giving something in return.', author: 'Alphonse Elric, Fullmetal Alchemist' },
+  { quote: 'The world is changed by your example, not by your opinion.', author: 'Paulo Coelho' },
+  { quote: 'The only way to do great work is to love what you do.', author: 'Steve Jobs' },
+  { quote: 'In the middle of every difficulty lies opportunity.', author: 'Albert Einstein' },
+  { quote: 'Do not go where the path may lead, go instead where there is no path and leave a trail.', author: 'Ralph Waldo Emerson' },
+  { quote: 'Success is not final, failure is not fatal: It is the courage to continue that counts.', author: 'Winston Churchill' },
+  { quote: 'The only limit to our realization of tomorrow will be our doubts of today.', author: 'Franklin D. Roosevelt' },
+  { quote: 'The best way to predict the future is to invent it.', author: 'Alan Kay' },
+  { quote: "Life is what happens when you're busy making other plans.", author: 'John Lennon' },
+  { quote: 'The journey of a thousand miles begins with one step.', author: 'Lao Tzu' },
+  { quote: "You miss 100% of the shots you don't take.", author: 'Wayne Gretzky' },
+  { quote: "Whether you think you can or you think you can't, you're right.", author: 'Henry Ford' },
+  { quote: 'The only way to achieve the impossible is to believe it is possible.', author: 'Charles Kingsleigh, Alice in Wonderland' },
+  { quote: 'Do what you can, with what you have, where you are.', author: 'Theodore Roosevelt' },
+  { quote: 'It does not matter how slowly you go as long as you do not stop.', author: 'Confucius' },
+  { quote: "Everything you've ever wanted is on the other side of fear.", author: 'George Addair' },
+  { quote: 'The best revenge is massive success.', author: 'Frank Sinatra' },
+  { quote: "Don't watch the clock; do what it does. Keep going.", author: 'Sam Levenson' },
+  { quote: 'The harder I work, the luckier I get.', author: 'Samuel Goldwyn' },
+  { quote: 'The only place where success comes before work is in the dictionary.', author: 'Vidal Sassoon' },
+  { quote: 'The secret of getting ahead is to get started.', author: 'Mark Twain' },
+  { quote: 'The best way to find yourself is to lose yourself in the service of others.', author: 'Mahatma Gandhi' },
+  { quote: 'The only thing we have to fear is fear itself.', author: 'Franklin D. Roosevelt' },
+  { quote: 'Programs must be written for people to read, and only incidentally for machines to execute.', author: 'Harold Abelson, SICP' },
+  { quote: 'Simplicity is prerequisite for reliability.', author: 'Edsger W. Dijkstra' },
+]

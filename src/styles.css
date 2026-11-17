@@ -1746,3 +1746,141 @@ a:hover .arrow--w {
     scroll-padding-top: 112px;
   }
 }
+
+/* ---------- Global Quotes Section ---------- */
+
+.quotes {
+  max-width: calc(var(--col) + 48px);
+  margin: 64px auto 20px;
+  padding: 0 24px;
+}
+
+.quotes__inner {
+  position: relative;
+  padding: 24px 28px 28px;
+  border: 1px solid var(--rule);
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--tile) 40%, transparent);
+  transition: border-color 0.25s ease, background-color 0.25s ease;
+}
+
+.quotes__inner:hover {
+  border-color: var(--rule-strong);
+  background: color-mix(in srgb, var(--tile) 65%, transparent);
+}
+
+.quotes__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+.quotes__pulse {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--muted);
+  margin-right: 8px;
+  vertical-align: middle;
+  opacity: 0.7;
+}
+
+.quotes__controls {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.quotes__count {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--faint);
+  margin-right: 4px;
+  user-select: none;
+}
+
+.quotes__sep {
+  opacity: 0.5;
+}
+
+.quotes__btn {
+  display: inline-grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  border: 1px solid var(--rule);
+  border-radius: 7px;
+  background: var(--bg);
+  color: var(--muted);
+  font-family: var(--mono);
+  font-size: 12px;
+  cursor: pointer;
+  transition: color 0.15s ease, border-color 0.15s ease, background-color 0.15s ease, transform 0.1s ease;
+}
+
+.quotes__btn:hover {
+  color: var(--ink);
+  border-color: var(--rule-strong);
+  background: var(--hover);
+}
+
+.quotes__btn:active {
+  transform: scale(0.94);
+}
+
+.quotes__btn--shuffle svg {
+  transition: transform 0.25s ease;
+}
+
+.quotes__btn--shuffle:hover svg {
+  transform: rotate(30deg);
+}
+
+.quotes__body {
+  margin: 0;
+  transition: opacity 0.22s cubic-bezier(0.2, 0.7, 0.2, 1), transform 0.22s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.quotes__body--fading {
+  opacity: 0;
+  transform: translateY(4px);
+}
+
+.quotes__text {
+  font-family: var(--serif);
+  font-size: clamp(20px, 2.8vw, 24px);
+  line-height: 1.35;
+  letter-spacing: -0.015em;
+  color: var(--ink);
+  text-wrap: pretty;
+}
+
+.quotes__author {
+  margin-top: 12px;
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--muted);
+  letter-spacing: 0.01em;
+}
+
+.quotes__dash {
+  color: var(--faint);
+  margin-right: 4px;
+}
+
+@media (max-width: 640px) {
+  .quotes {
+    margin-top: 48px;
+    padding: 0 20px;
+  }
+  .quotes__inner {
+    padding: 20px;
+  }
+  .quotes__text {
+    font-size: 19px;
+  }
+}
