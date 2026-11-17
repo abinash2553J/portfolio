@@ -48,8 +48,8 @@ export const PAGES: PageMeta[] = [
     path: '/open-source',
     title: 'Open source',
     eyebrow: 'Open source',
-    heading: 'Upstream contributions',
-    description: 'Abinash Karan’s contributions to freeCodeCamp, apache/arrow-rs, libredb-studio and containers/ramalama.',
+    heading: 'Every upstream pull request',
+    description: 'Every pull request Abinash Karan has opened on open-source projects, including freeCodeCamp, apache/arrow-rs, libredb-studio and containers/ramalama.',
     og: 'open-source',
   },
   {

@@ -1,5 +1,7 @@
 import type { Theme } from './App'
-import { EMAIL, FEATURED, GITHUB, LINKEDIN, MORE, UPSTREAM } from './content'
+import { useState } from 'react'
+import { EMAIL, FEATURED, GITHUB, LINKEDIN, MORE } from './content'
+import { cleanTitle, usePRs, type PR } from './github'
 import { Link } from './router'
 import { Arrow, CopyEmail, PageHead, Section, useTitle } from './ui'
 
@@ -26,16 +28,20 @@ function More({ to, children }: { to: string; children: React.ReactNode }) {
   )
 }
 
-function UpstreamList({ items }: { items: typeof UPSTREAM }) {
+const fmtDate = (d: string) => new Date(d + 'T00:00:00').toLocaleDateString('en-GB', { month: 'short', year: 'numeric' })
+
+function PRList({ items }: { items: PR[] }) {
   return (
-    <ul className="upstream">
-      {items.map((u, i) => (
-        <li key={u.href} data-reveal style={{ '--d': `${i * 70}ms` } as React.CSSProperties}>
-          <a href={u.href} {...ext} className="upstream__row">
-            <span className="upstream__repo">{u.repo}</span>
-            <span className="upstream__title">{u.title}</span>
+    <ul className="upstream prs">
+      {items.map((p, i) => (
+        <li key={p.url} style={{ '--i': i } as React.CSSProperties}>
+          <a href={p.url} {...ext} className="upstream__row">
+            <span className="upstream__repo">{p.repo}</span>
+            <span className="upstream__title">{cleanTitle(p.title)}</span>
             <span className="upstream__ref">
-              {u.ref} <Arrow />
+              <span className={`pr-state pr-state--${p.state}`}>{p.state}</span>
+              <span className="sep">·</span>
+              {fmtDate(p.date)} <Arrow />
             </span>
           </a>
         </li>
@@ -48,6 +54,7 @@ function UpstreamList({ items }: { items: typeof UPSTREAM }) {
 
 export function Home({ time }: { time: string }) {
   useTitle()
+  const { prs } = usePRs()
   return (
     <>
       <header className="hero">
@@ -93,8 +100,10 @@ export function Home({ time }: { time: string }) {
         </ul>
       </Section>
 
-      <Section index="02" label="Open source" aside={<Link to="/open-source">All contributions</Link>}>
-        <UpstreamList items={UPSTREAM.slice(0, 2)} />
+      <Section index="02" label="Open source" aside={<Link to="/open-source">All {prs.length} pull requests</Link>}>
+        <div data-reveal>
+          <PRList items={prs.filter((p) => p.state === 'merged').slice(0, 3)} />
+        </div>
       </Section>
 
       <Section index="03" label="Now">
@@ -244,17 +253,43 @@ export function CaseStudy({ slug, theme }: { slug: string; theme: Theme }) {
 
 /* ---------- Open source ---------- */
 
+const FILTERS = ['all', 'merged', 'open', 'closed'] as const
+
 export function OpenSource() {
   useTitle('Open source')
+  const { prs, live } = usePRs()
+  const [filter, setFilter] = useState<(typeof FILTERS)[number]>('all')
+  const count = (f: (typeof FILTERS)[number]) => (f === 'all' ? prs.length : prs.filter((p) => p.state === f).length)
+  const shown = filter === 'all' ? prs : prs.filter((p) => p.state === filter)
+  const projects = new Set(prs.map((p) => p.repo)).size
   return (
     <>
       <PageHead index="02" label="Open source" title="Upstream">
-        Fixes I&rsquo;ve sent to projects I use. Most started as a bug I hit, then a read through the source to find where the assumption broke.
+        Every pull request I&rsquo;ve opened on other people&rsquo;s projects, newest first. Most started as a bug I hit, then a read through
+        the source to find where the assumption broke.
       </PageHead>
-      <UpstreamList items={UPSTREAM} />
+      <div className="prs-bar" data-reveal>
+        <p className="prs-stats">
+          {prs.length} pull requests <span className="sep">·</span> {count('merged')} merged <span className="sep">·</span> {projects} projects
+          <span className="prs-live" title={live ? 'Fetched from the GitHub API just now' : 'Snapshot from the last deploy'}>
+            <span className={`prs-live__dot${live ? ' is-live' : ''}`} />
+            {live ? 'Live from GitHub' : 'Snapshot'}
+          </span>
+        </p>
+        <div className="prs-filter" role="group" aria-label="Filter pull requests">
+          {FILTERS.filter((f) => f === 'all' || count(f) > 0).map((f) => (
+            <button key={f} aria-pressed={filter === f} onClick={() => setFilter(f)}>
+              {f} <span>{count(f)}</span>
+            </button>
+          ))}
+        </div>
+      </div>
+      <div key={filter}>
+        <PRList items={shown} />
+      </div>
       <div className="row-links">
-        <a href={GITHUB} {...ext} className="more-link" data-reveal>
-          Everything else on GitHub <Arrow />
+        <a href={`https://github.com/pulls?q=${encodeURIComponent('is:pr author:abinash2553J')}`} {...ext} className="more-link" data-reveal>
+          View on GitHub <Arrow />
         </a>
       </div>
     </>

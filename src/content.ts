@@ -118,13 +118,6 @@ export const MORE = [
   },
 ]
 
-export const UPSTREAM = [
-  { repo: 'apache/arrow-rs', title: 'Preserve union nullability when introducing nulls', ref: 'PR #11288', href: 'https://github.com/apache/arrow-rs/pull/11288' },
-  { repo: 'freeCodeCamp/freeCodeCamp', title: 'Vowel balance edge cases in the curriculum tests', ref: 'PR #70252', href: 'https://github.com/freeCodeCamp/freeCodeCamp/pull/70252' },
-  { repo: 'libredb/libredb-studio', title: 'Preserve nested MongoDB paths in generated test data', ref: 'PR #1555', href: 'https://github.com/libredb/libredb-studio/pull/1555' },
-  { repo: 'containers/ramalama', title: 'XDG_CACHE_HOME fallback paths used a literal ~', ref: 'Issue #2943', href: 'https://github.com/containers/ramalama/issues/2943' },
-]
-
 export const NAV = [
   { path: '/work', label: 'Work', key: 'w' },
   { path: '/open-source', label: 'Open source', key: 'o' },

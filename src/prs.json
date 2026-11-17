@@ -1,0 +1,114 @@
+[
+  {
+    "repo": "libredb/libredb-studio",
+    "number": 1555,
+    "title": "fix(mongodb): preserve nested paths in generated test data",
+    "url": "https://github.com/libredb/libredb-studio/pull/1555",
+    "state": "merged",
+    "date": "2026-10-06"
+  },
+  {
+    "repo": "apache/arrow-rs",
+    "number": 11288,
+    "title": "fix: preserve union nullability when introducing nulls",
+    "url": "https://github.com/apache/arrow-rs/pull/11288",
+    "state": "closed",
+    "date": "2026-09-29"
+  },
+  {
+    "repo": "OpenLedger-Foundation/Kora-Frontend",
+    "number": 855,
+    "title": "i18n: localize InProgressOverlay aria labels",
+    "url": "https://github.com/OpenLedger-Foundation/Kora-Frontend/pull/855",
+    "state": "merged",
+    "date": "2026-09-26"
+  },
+  {
+    "repo": "freeCodeCamp/freeCodeCamp",
+    "number": 70347,
+    "title": "fix(curriculum): remove broken Scrimba video links",
+    "url": "https://github.com/freeCodeCamp/freeCodeCamp/pull/70347",
+    "state": "merged",
+    "date": "2026-09-24"
+  },
+  {
+    "repo": "containers/ramalama",
+    "number": 2944,
+    "title": "docs: fix XDG path fallbacks in README",
+    "url": "https://github.com/containers/ramalama/pull/2944",
+    "state": "merged",
+    "date": "2026-10-05"
+  },
+  {
+    "repo": "freeCodeCamp/freeCodeCamp",
+    "number": 70325,
+    "title": "fix(curriculum): code clarity lecture wording",
+    "url": "https://github.com/freeCodeCamp/freeCodeCamp/pull/70325",
+    "state": "closed",
+    "date": "2026-09-23"
+  },
+  {
+    "repo": "freeCodeCamp/freeCodeCamp",
+    "number": 70301,
+    "title": "fix(curriculum): Remove broken Scrimba video links from Basic CSS",
+    "url": "https://github.com/freeCodeCamp/freeCodeCamp/pull/70301",
+    "state": "merged",
+    "date": "2026-09-23"
+  },
+  {
+    "repo": "OpenLedger-Foundation/Kora-Frontend",
+    "number": 832,
+    "title": "test: add useFormatters locale regression tests",
+    "url": "https://github.com/OpenLedger-Foundation/Kora-Frontend/pull/832",
+    "state": "merged",
+    "date": "2026-09-26"
+  },
+  {
+    "repo": "freeCodeCamp/freeCodeCamp",
+    "number": 70298,
+    "title": "fix(curriculum): clarify code clarity lectures",
+    "url": "https://github.com/freeCodeCamp/freeCodeCamp/pull/70298",
+    "state": "merged",
+    "date": "2026-09-28"
+  },
+  {
+    "repo": "freeCodeCamp/freeCodeCamp",
+    "number": 70287,
+    "title": "fix(curriculum): remove broken Scrimba video links",
+    "url": "https://github.com/freeCodeCamp/freeCodeCamp/pull/70287",
+    "state": "merged",
+    "date": "2026-09-22"
+  },
+  {
+    "repo": "freeCodeCamp/freeCodeCamp",
+    "number": 70285,
+    "title": "fix(curriculum): clarify employee card hint",
+    "url": "https://github.com/freeCodeCamp/freeCodeCamp/pull/70285",
+    "state": "closed",
+    "date": "2026-09-22"
+  },
+  {
+    "repo": "freeCodeCamp/freeCodeCamp",
+    "number": 70267,
+    "title": "fix(curriculum): clarify movie ticket booking hint",
+    "url": "https://github.com/freeCodeCamp/freeCodeCamp/pull/70267",
+    "state": "merged",
+    "date": "2026-09-22"
+  },
+  {
+    "repo": "Mentora-Educational-Platform/Client-View-Mentozy",
+    "number": 1,
+    "title": "MVP",
+    "url": "https://github.com/Mentora-Educational-Platform/Client-View-Mentozy/pull/1",
+    "state": "merged",
+    "date": "2026-02-07"
+  },
+  {
+    "repo": "Tarun-Singh1/Bloomalyzer",
+    "number": 3,
+    "title": "Vinay",
+    "url": "https://github.com/Tarun-Singh1/Bloomalyzer/pull/3",
+    "state": "closed",
+    "date": "2025-10-05"
+  }
+]
