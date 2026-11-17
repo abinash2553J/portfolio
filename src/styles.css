@@ -404,6 +404,28 @@ a:hover .arrow {
   letter-spacing: -0.01em;
 }
 
+.more__title a.more__name {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--ink);
+}
+
+.more__live {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 4px;
+  font-family: var(--mono);
+  font-size: 11.5px;
+  color: var(--muted);
+  transition: color 0.15s ease;
+}
+
+.more__live:hover {
+  color: var(--ink);
+}
+
 .more__title .project__kind {
   font-size: 13.5px;
 }

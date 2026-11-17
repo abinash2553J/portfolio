@@ -165,8 +165,19 @@ export function Work({ theme }: { theme: Theme }) {
         {MORE.map((p) => (
           <div key={p.name} className="more__row">
             <div className="more__title">
-              {p.name}
+              {p.href ? (
+                <a href={p.href} {...ext} className="more__name">
+                  {p.name} <Arrow />
+                </a>
+              ) : (
+                <span className="more__name">{p.name}</span>
+              )}
               <span className="project__kind">{p.kind}</span>
+              {p.live && (
+                <a href={p.live} {...ext} className="more__live">
+                  Live demo <Arrow />
+                </a>
+              )}
             </div>
             <p className="more__summary">{p.summary}</p>
             <p className="more__stack">{p.stack}</p>
