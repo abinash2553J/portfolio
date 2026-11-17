@@ -176,6 +176,36 @@ a:hover .arrow {
   padding: 104px 0 88px;
 }
 
+.hero__row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.hero__sticker {
+  flex: none;
+  cursor: grab;
+  user-select: none;
+  filter: drop-shadow(0 8px 18px rgba(0, 0, 0, 0.14));
+  transition: transform 0.25s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.hero__sticker:hover {
+  transform: rotate(4deg) scale(1.05);
+}
+
+.hero__sticker:active {
+  cursor: grabbing;
+}
+
+@media (max-width: 640px) {
+  .hero__row {
+    flex-direction: column-reverse;
+    gap: 16px;
+  }
+}
+
 .hero__name {
   font-family: var(--serif);
   font-weight: 400;
@@ -1655,6 +1685,46 @@ a:hover .arrow--w {
 
 .notfound {
   padding: 40px 0 80px;
+}
+
+.notfound__top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.notfound__sticker,
+.about__sticker {
+  flex: none;
+  display: inline-block;
+  cursor: grab;
+  user-select: none;
+  filter: drop-shadow(0 8px 18px rgba(0, 0, 0, 0.16));
+  transition: transform 0.25s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.notfound__sticker:hover,
+.about__sticker:hover {
+  transform: rotate(-3deg) scale(1.04);
+}
+
+.notfound__sticker:active,
+.about__sticker:active {
+  cursor: grabbing;
+}
+
+.about__sticker-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin-top: 12px;
+}
+
+@media (max-width: 640px) {
+  .notfound__top {
+    flex-direction: column-reverse;
+  }
 }
 
 .notfound code,

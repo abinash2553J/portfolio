@@ -1,5 +1,6 @@
 import type { Theme } from './App'
 import { useState } from 'react'
+import { JapanBadgeSticker, LuffyHatSticker } from 'stick-it-up'
 import { EMAIL, FEATURED, GITHUB, LINKEDIN, MORE } from './content'
 import { cleanTitle, usePRs, type PR } from './github'
 import { Link } from './router'
@@ -58,8 +59,15 @@ export function Home({ time }: { time: string }) {
   return (
     <>
       <header className="hero">
-        <h1 className="hero__name">Abinash Karan</h1>
-        <p className="hero__role">Software Engineer · AI &amp; Systems</p>
+        <div className="hero__row">
+          <div className="hero__intro">
+            <h1 className="hero__name">Abinash Karan</h1>
+            <p className="hero__role">Software Engineer · AI &amp; Systems</p>
+          </div>
+          <div className="hero__sticker" title="Peel the Japan badge!">
+            <JapanBadgeSticker size={100} peel />
+          </div>
+        </div>
         <p className="hero__statement">
           I build software where machine learning meets real systems, and I read the source before I trust the abstraction.
         </p>
@@ -349,6 +357,11 @@ export function About() {
             <dd>Python, TypeScript, React, Next.js, FastAPI, PostgreSQL, XGBoost.</dd>
           </div>
         </dl>
+        <div className="about__sticker-wrap" data-reveal>
+          <div className="about__sticker" title="Peel Luffy's straw hat!">
+            <LuffyHatSticker size={100} peel />
+          </div>
+        </div>
       </div>
       <div className="row-links">
         <More to="/work">See the work</More>
@@ -391,11 +404,18 @@ export function NotFound() {
   useTitle('Not found')
   return (
     <div className="notfound">
-      <p className="label">404</p>
-      <h1 className="pagehead__title">This page wandered off.</h1>
-      <p className="pagehead__intro">
-        <code>{location.pathname}</code> doesn&rsquo;t exist. Try the <Link to="/">home page</Link>, or press <kbd>/</kbd> to search.
-      </p>
+      <div className="notfound__top">
+        <div>
+          <p className="label">404</p>
+          <h1 className="pagehead__title">This page wandered off.</h1>
+          <p className="pagehead__intro">
+            <code>{location.pathname}</code> doesn&rsquo;t exist. Try the <Link to="/">home page</Link>, or press <kbd>/</kbd> to search.
+          </p>
+        </div>
+        <div className="notfound__sticker" title="Peel Luffy's straw hat!">
+          <LuffyHatSticker size={100} peel />
+        </div>
+      </div>
       <figure className="duel">
         <img src="/art/duel.gif" alt="Pixel-art Luffy and Crocodile fighting" width={400} height={300} />
         <figcaption>Meanwhile, Luffy is settling it the old-fashioned way.</figcaption>
