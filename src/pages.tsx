@@ -437,3 +437,6 @@ export function NotFound() {
           <p>Press <kbd>Space</kbd> or click Fight. Five hits to win.</p>
         </div>
       </div>
+    </div>
+  )
+}
