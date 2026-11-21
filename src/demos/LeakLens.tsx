@@ -1,6 +1,7 @@
 import { Caret, Collapse, Count, Prompt, Stage, Window, type Act } from '../kit'
 import type { Theme } from '../App'
 import './leaklens.css'
+import { EntropyLab } from '../EntropyLab'
 
 // LeakLens: a scan in a terminal. Beats: the command is typed and run; the
 // file count rolls; two findings arrive one by one; the summary lands with
@@ -105,5 +106,6 @@ export function LeakLensDemo({ theme }: { theme: Theme }) {
         }}
       </Stage>
     </div>
+    <EntropyLab />
   )
 }
