@@ -16,8 +16,8 @@ export const PAGES: PageMeta[] = [
     path: '/work',
     title: 'Work',
     eyebrow: 'Selected work',
-    heading: 'Rove, Vector, LeakLens and more',
-    description: 'Case studies of Rove, Vector and LeakLens, plus Bloomalyzer and Road Safety AI, by Abinash Karan.',
+    heading: 'Rove, LeakLens and more',
+    description: 'Case studies of Rove and LeakLens, plus Bloomalyzer and Road Safety AI, by Abinash Karan.',
     og: 'work',
   },
   {
@@ -27,14 +27,6 @@ export const PAGES: PageMeta[] = [
     heading: 'Rove',
     description: 'Rove turns a one-line brief into an editable, shareable itinerary with a map, route and group expense ledger.',
     og: 'rove',
-  },
-  {
-    path: '/work/vector',
-    title: 'Vector',
-    eyebrow: 'Case study · Career discovery',
-    heading: 'Vector',
-    description: 'Vector matches people to roles with deterministic, traceable scoring, and uses an LLM only to explain the ranking.',
-    og: 'vector',
   },
   {
     path: '/work/leaklens',

@@ -45,29 +45,6 @@ export const FEATURED: Featured[] = [
     ],
   },
   {
-    slug: 'vector',
-    name: 'Vector',
-    kind: 'Career discovery platform',
-    tagline: 'Deterministic role matching, with the model only explaining it.',
-    summary:
-      'Scores roles against a deterministic career graph first, then uses an LLM only to explain the match and surface the skill gaps worth closing.',
-    stack: ['Next.js', 'React', 'Tailwind', 'FastAPI', 'Supabase', 'Gemini'],
-    links: [{ label: 'Source', href: `${GITHUB}/vector` }],
-    lede:
-      'Most AI career tools let a language model guess. Vector inverts that: the ranking comes from a career graph that is reproducible and testable, and the model is only allowed to explain it.',
-    built: [
-      'A profile-to-role scoring pass over a structured career graph.',
-      'Ranked role matches with a score you can trace back to specific skills.',
-      'Plain-language match explanations generated after the score is fixed.',
-      'Skill-gap suggestions ordered by how much they would move the match.',
-    ],
-    notes: [
-      'Keeping scoring deterministic means the same profile always gets the same ranking, which makes it unit-testable.',
-      'The LLM never sees a chance to reorder results, so a bad generation degrades the prose, not the answer.',
-      'A FastAPI service owns scoring; the Next.js front end only renders and streams explanations.',
-    ],
-  },
-  {
     slug: 'leaklens',
     name: 'LeakLens',
     kind: 'Secret scanner CLI',
