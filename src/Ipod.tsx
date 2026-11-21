@@ -117,8 +117,9 @@ export function IpodClassic({ onClose }: { onClose: () => void }) {
 
   useEffect(() => {
     publishPlayback(playing, playing ? PLAYLIST[songIdx] : null)
-    return () => publishPlayback(false, null)
   }, [playing, songIdx])
+
+  useEffect(() => () => publishPlayback(false, null), [])
 
   // Volume change
   useEffect(() => {
