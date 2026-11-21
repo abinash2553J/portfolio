@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import './ipod.css'
 import { publishPlayback } from './playback'
+import { playTactile } from './fx'
 
 /* ---------- Data ---------- */
 
@@ -153,6 +154,7 @@ export function IpodClassic({ onClose }: { onClose: () => void }) {
   }, [])
 
   const wheelTick = useCallback((dir: number) => {
+    playTactile('tick')
     doFlash()
     if (screen === 'menu') {
       setMenuSel((s) => Math.max(0, Math.min(MAIN_MENU.length - 1, s + dir)))
