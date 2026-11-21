@@ -7,6 +7,7 @@ import { Link } from './router'
 import { Arrow, CopyEmail, PageHead, Section, useTitle } from './ui'
 import { usePlayback } from './playback'
 import { toast } from './fx'
+import { EntropyLab } from './EntropyLab'
 
 const ext = { target: '_blank', rel: 'noreferrer' }
 const num = (i: number) => String(i + 1).padStart(2, '0')
@@ -238,6 +239,7 @@ export function CaseStudy({ slug, theme }: { slug: string; theme: Theme }) {
       <div className="case__visual">
         <Demo theme={theme} />
       </div>
+      {slug === 'leaklens' && <EntropyLab />}
       <Section label="What it does">
         <ul className="points">
           {f.built.map((b, j) => (
