@@ -7,10 +7,21 @@ export function QuotesSection() {
   const [index, setIndex] = useState(0)
   const [fading, setFading] = useState(false)
   const [paused, setPaused] = useState(false)
+  const [hovered, setHovered] = useState(false)
+  const [focused, setFocused] = useState(false)
+  const [reduced, setReduced] = useState(prefersReducedMotion())
+  const isPaused = paused || hovered || focused
+
+  useEffect(() => {
+    const media = window.matchMedia('(prefers-reduced-motion: reduce)')
+    const onChange = () => setReduced(media.matches)
+    media.addEventListener('change', onChange)
+    return () => media.removeEventListener('change', onChange)
+  }, [])
 
   const changeQuote = (nextIdx: number) => {
     if (fading) return
-    if (prefersReducedMotion()) { setIndex((nextIdx + QUOTES.length) % QUOTES.length); return }
+    if (reduced) { setIndex((nextIdx + QUOTES.length) % QUOTES.length); return }
     setFading(true)
     setTimeout(() => {
       setIndex((nextIdx + QUOTES.length) % QUOTES.length)
@@ -22,12 +33,12 @@ export function QuotesSection() {
   const prev = () => changeQuote(index - 1)
   // Auto-rotate every 8 seconds, paused on hover, focus, or explicit pause
   useEffect(() => {
-    if (paused || prefersReducedMotion()) return
+    if (isPaused || reduced) return
     const id = setInterval(() => {
       changeQuote(index + 1)
     }, 8000)
     return () => clearInterval(id)
-  }, [index, paused, fading])
+  }, [index, isPaused, reduced, fading])
 
   const current = QUOTES[index]
   const num = String(index + 1).padStart(2, '0')
@@ -37,10 +48,10 @@ export function QuotesSection() {
     <section
       className="quotes"
       aria-label="Quotes on systems and life"
-      onMouseEnter={() => setPaused(true)}
-      onMouseLeave={() => setPaused(false)}
-      onFocusCapture={() => setPaused(true)}
-      onBlurCapture={(e) => { if (!e.currentTarget.contains(e.relatedTarget as Node)) setPaused(false) }}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      onFocusCapture={() => setFocused(true)}
+      onBlurCapture={(e) => { if (!e.currentTarget.contains(e.relatedTarget as Node)) setFocused(false) }}
     >
       <div className="quotes__inner">
         <div className="quotes__head">
