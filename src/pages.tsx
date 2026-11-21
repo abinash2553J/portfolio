@@ -6,7 +6,7 @@ import { cleanTitle, usePRs, type PR } from './github'
 import { Link } from './router'
 import { Arrow, CopyEmail, PageHead, Section, useTitle } from './ui'
 import { usePlayback } from './playback'
-import { toast } from './fx'
+import { playTactile, toast } from './fx'
 import { EntropyLab } from './EntropyLab'
 
 const ext = { target: '_blank', rel: 'noreferrer' }
@@ -422,6 +422,7 @@ export function NotFound() {
       const target = event.target
       if (target instanceof HTMLElement && (target.isContentEditable || ['INPUT', 'TEXTAREA'].includes(target.tagName))) return
       event.preventDefault()
+      playTactile('click')
       setHits((value) => Math.min(5, value + 1))
     }
     window.addEventListener('keydown', onKeyDown)
@@ -430,12 +431,12 @@ export function NotFound() {
   useEffect(() => {
     if (hits === 5) toast('Victory. The duel is yours.')
   }, [hits])
-  const fight = () => setHits((value) => value >= 5 ? 0 : value + 1)
+  const fight = () => { playTactile('click'); setHits((value) => value >= 5 ? 0 : value + 1) }
   return (
     <div className="notfound">
       <div className="duel-game" data-hits={hits}>
         <figure className="duel">
-          <img src="/art/duel.gif" alt="Pixel-art Luffy and Crocodile fighting" width={400} height={300} />
+          <img key={hits} src="/art/duel.gif" alt="Pixel-art Luffy and Crocodile fighting" width={400} height={300} />
           <figcaption>Meanwhile, Luffy is settling it the old-fashioned way.</figcaption>
         </figure>
         <div className="duel-game__panel">
