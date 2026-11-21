@@ -1972,14 +1972,11 @@ a:hover .arrow--w {
 
 .hero { position:relative; isolation:isolate; }
 .hero::before {
-  content:''; position:absolute; inset:42px -20px 34px; z-index:-1; pointer-events:none; opacity:.22;
-  background-image:radial-gradient(var(--faint) .65px, transparent .65px); background-size:13px 13px;
-  mask-image:radial-gradient(ellipse at 50% 40%, #000, transparent 72%);
+  content:''; position:absolute; inset:42px -20px 34px; z-index:-1; pointer-events:none; opacity:.09;
+  background-image:radial-gradient(var(--faint) .55px, transparent .55px); background-size:15px 15px;
+  mask-image:radial-gradient(ellipse at 50% 40%, #000 10%, transparent 72%);
 }
-.hero::after {
-  content:''; position:absolute; inset:0; z-index:-1; pointer-events:none; opacity:.12;
-  background:radial-gradient(ellipse at 15% 15%, var(--faint), transparent 58%);
-}
+/* The old radial wash made the hero column look like a dark rectangular panel. */
 
 .entropy-lab {
   margin:30px 0 56px; padding:22px; border:1px solid var(--rule);
