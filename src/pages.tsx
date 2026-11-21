@@ -434,6 +434,18 @@ export function NotFound() {
   const fight = () => { playTactile('click'); setHits((value) => value >= 5 ? 0 : value + 1) }
   return (
     <div className="notfound">
+      <div className="notfound__top">
+        <div>
+          <p className="label">404</p>
+          <h1 className="pagehead__title">This page wandered off.</h1>
+          <p className="pagehead__intro">
+            <code>{location.pathname}</code> doesn&rsquo;t exist. Try the <Link to="/">home page</Link>, or press <kbd>/</kbd> to search.
+          </p>
+        </div>
+        <div className="notfound__sticker" title="Peel Luffy's straw hat!">
+          <LuffyHatSticker size={100} peel />
+        </div>
+      </div>
       <div className="duel-game" data-hits={hits}>
         <figure className="duel">
           <img key={hits} src="/art/duel.gif" alt="Pixel-art Luffy and Crocodile fighting" width={400} height={300} />
