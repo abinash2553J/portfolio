@@ -2,6 +2,7 @@ import { useEffect, useLayoutEffect, useMemo, useState } from 'react'
 import { flushSync } from 'react-dom'
 import { Dragon, Nimbus, Palette, Toaster, greetConsole, isMac, summon, toast, useKeys, usePetals, useProgress, useReveal, type Command } from './fx'
 import { IpodClassic } from './Ipod'
+import { usePlayback } from './playback'
 import { QuotesSection } from './Quotes'
 import { RoveDemo } from './demos/Rove'
 import { VectorDemo } from './demos/Vector'
@@ -108,6 +109,7 @@ function Page() {
   const asleep = Number(time.slice(0, 2)) < 6
   const [palette, setPalette] = useState(false)
   const [ipod, setIpod] = useState(false)
+  const playback = usePlayback()
   const petals = usePetals()
   useReveal(path)
   useProgress(path)
@@ -192,9 +194,7 @@ function Page() {
       </a>
       <nav className="nav">
         <div className="nav__inner">
-          <Link to="/" className="mark" aria-label="Abinash Karan, home">
-            ak<span>.</span>
-          </Link>
+          <div className="nav__brand"><Link to="/" className="mark" aria-label="Abinash Karan, home">ak<span>.</span></Link>{playback.playing && playback.track && <button className="now-playing" onClick={() => setIpod(true)} aria-label={`Open iPod: ${playback.track.title} by ${playback.track.artist}`}><span className="equalizer" aria-hidden="true"><i /><i /><i /></span><span className="now-playing__label">{playback.track.title} · {playback.track.artist}</span></button>}</div>
           <div className="nav__links">
             {NAV.map((n) => (
               <Link key={n.path} to={n.path} aria-current={path === n.path || path.startsWith(n.path + '/') ? 'page' : undefined}>
