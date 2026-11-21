@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import './ipod.css'
+import { publishPlayback } from './playback'
 
 /* ---------- Data ---------- */
 
@@ -113,6 +114,11 @@ export function IpodClassic({ onClose }: { onClose: () => void }) {
       audio.pause()
     }
   }, [playing])
+
+  useEffect(() => {
+    publishPlayback(playing, playing ? PLAYLIST[songIdx] : null)
+    return () => publishPlayback(false, null)
+  }, [playing, songIdx])
 
   // Volume change
   useEffect(() => {
