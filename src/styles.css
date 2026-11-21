@@ -2052,3 +2052,17 @@ a:hover .arrow--w {
   .currently-pill { font-size:10px; }
   .hero__meta { align-items:flex-start; flex-direction:column; gap:8px; }
 }
+
+/* ---------- 404 duel micro-game ---------- */
+.duel-game { display:grid; grid-template-columns:minmax(0,1fr) 190px; align-items:center; gap:22px; margin-top:28px; }
+.duel-game .duel { min-width:0; margin:0; }
+.duel-game__panel { padding:16px; border:1px solid var(--rule); border-radius:12px; background:var(--tile); }
+.duel-game__score { display:flex; justify-content:space-between; align-items:center; gap:8px; color:var(--muted); font:10px var(--mono); }
+.duel-game__score strong { color:var(--ink); font-size:12px; font-weight:500; }
+.duel-game__health { height:6px; margin:13px 0; overflow:hidden; border-radius:8px; background:var(--rule-strong); }
+.duel-game__health span { display:block; height:100%; border-radius:inherit; background:var(--green); transition:width .2s ease; }
+.duel-game__fight { width:100%; padding:9px 12px; border:1px solid var(--rule-strong); border-radius:8px; background:var(--bg); color:var(--ink); font:12px var(--mono); cursor:pointer; transition:background .15s ease, transform .15s ease; }
+.duel-game__fight:hover { background:var(--hover); transform:translateY(-1px); }
+.duel-game__panel p { margin-top:10px; color:var(--muted); font-size:11px; line-height:1.5; }
+.duel-game[data-hits="5"] .duel-game__fight { border-color:var(--green); color:var(--green); }
+@media(max-width:560px) { .duel-game { grid-template-columns:1fr; gap:14px; } .duel-game__panel { display:grid; grid-template-columns:1fr 1fr; align-items:center; gap:10px; } .duel-game__health { grid-column:1 / -1; margin:0; } .duel-game__panel p { grid-column:1 / -1; margin:0; } }
