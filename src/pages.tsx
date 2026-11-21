@@ -171,7 +171,7 @@ export function Work({ theme }: { theme: Theme }) {
       <div className="more" data-reveal>
         <p className="label more__label">Also</p>
         {MORE.map((p) => (
-          <div key={p.name} className="more__row" tabIndex={0} data-preview-name={p.name} data-preview-kind={p.kind} data-preview-summary={p.summary} data-preview-stack={p.stack}>
+          <div key={p.name} className="more__row" tabIndex={0}>
             <div className="more__title">
               {p.href ? (
                 <a href={p.href} {...ext} className="more__name">
@@ -189,6 +189,10 @@ export function Work({ theme }: { theme: Theme }) {
             </div>
             <p className="more__summary">{p.summary}</p>
             <p className="more__stack">{p.stack}</p>
+            <div className="more__preview" aria-hidden="true">
+              <div className="more__preview-chrome"><i /><i /><i /><span>{p.name.toLowerCase()} / overview</span></div>
+              <div className="more__preview-body"><strong>{p.name}</strong><span>{p.kind}</span><em>{p.stack.split(' · ').slice(0, 3).join(' · ')}</em></div>
+            </div>
           </div>
         ))}
       </div>
