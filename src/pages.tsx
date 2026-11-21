@@ -77,7 +77,8 @@ export function Home({ time }: { time: string }) {
           <span className="meta">
             Odisha, India <span className="sep">·</span> {time} IST
           </span>
-          <span className="status"><span className="status__dot" />{playback.playing && playback.track ? `Listening to: ${playback.track.title}` : 'Currently: Reading DDIA · Building systems & ML'}</span>
+          <span className="status"><span className="status__dot" />Open to SWE internships</span>
+          <span className="currently-pill"><span className="currently-pill__label">Currently</span>{playback.playing && playback.track ? `Listening to: ${playback.track.title}` : 'Reading DDIA · Building systems & ML'}</span>
         </div>
         <div className="hero__links">
           <a href={GITHUB} {...ext}>
