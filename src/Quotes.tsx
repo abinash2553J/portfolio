@@ -49,7 +49,7 @@ export function QuotesSection() {
             Words that stick
           </span>
           <div className="quotes__controls">
-            <span className="quotes__count" aria-live="polite">
+            <span className="quotes__count" aria-live="off">
               {num} <span className="quotes__sep">/</span> {total}
             </span>
             <button
