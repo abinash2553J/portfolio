@@ -251,7 +251,7 @@ function Page() {
       <Palette open={palette} onClose={() => setPalette(false)} commands={commands} />
       <Nimbus />
       <Toaster />
-      {ipod && <IpodClassic onClose={() => setIpod(false)} />}
+      <IpodClassic open={ipod} onClose={() => setIpod(false)} />
     </>
   )
 }
