@@ -3,6 +3,7 @@ import { flushSync } from 'react-dom'
 import { Dragon, Nimbus, Palette, Toaster, greetConsole, isMac, summon, toast, useKeys, usePetals, useProgress, useReveal, type Command } from './fx'
 import { IpodClassic } from './Ipod'
 import { usePlayback } from './playback'
+import { playTactile } from './fx'
 import { QuotesSection } from './Quotes'
 import { RoveDemo } from './demos/Rove'
 import { VectorDemo } from './demos/Vector'
@@ -201,14 +202,14 @@ function Page() {
                 {n.label}
               </Link>
             ))}
-            <button className="kbar" onClick={() => setPalette(true)} aria-label="Open command menu" title="Command menu">
+            <button className="kbar" onClick={() => { playTactile('pop'); setPalette(true) }} aria-label="Open command menu" title="Command menu">
               <svg width="13" height="13" viewBox="0 0 16 16" aria-hidden>
                 <circle cx="7" cy="7" r="4.8" fill="none" stroke="currentColor" strokeWidth="1.4" />
                 <path d="m10.6 10.6 3.2 3.2" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
               </svg>
               <kbd>{isMac ? '⌘' : 'Ctrl'} K</kbd>
             </button>
-            <ThemeToggle theme={theme} onToggle={toggleTheme} />
+            <ThemeToggle theme={theme} onToggle={(origin) => { playTactile('click'); toggleTheme(origin) }} />
           </div>
         </div>
         <div className="subnav">
