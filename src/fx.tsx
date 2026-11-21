@@ -116,12 +116,14 @@ export function useKeys(h: { palette: () => void; theme: () => void; sakura: () 
       if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
         e.preventDefault()
         playTactile('pop')
+        playTactile('pop')
         ref.current.palette()
         return
       }
       if (typing(e.target) || e.metaKey || e.ctrlKey || e.altKey) return
       if (e.key === '/' || e.key === '?') {
         e.preventDefault()
+        playTactile('pop')
         ref.current.palette()
         return
       }
@@ -147,6 +149,7 @@ export function useKeys(h: { palette: () => void; theme: () => void; sakura: () 
         buf = ''
         ref.current.secret(word)
       } else if (e.key === 't') {
+        playTactile('click')
         ref.current.theme()
       }
     }
@@ -314,6 +317,7 @@ export function Palette({ open, onClose, commands }: { open: boolean; onClose: (
 
   const run = (c?: Command) => {
     if (!c) return
+    playTactile('click')
     onClose()
     requestAnimationFrame(() => c.run())
   }
