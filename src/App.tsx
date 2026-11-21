@@ -1,15 +1,13 @@
 import { useEffect, useLayoutEffect, useMemo, useState } from 'react'
 import { flushSync } from 'react-dom'
-import { Dragon, Nimbus, Palette, Toaster, greetConsole, isMac, playTactile, summon, toast, useKeys, usePetals, useProgress, useReveal, type Command } from './fx'
+import { Dragon, Nimbus, Palette, Toaster, greetConsole, isMac, playTactile, playThemeSwitch, summon, toast, useKeys, usePetals, useProgress, useReveal, type Command } from './fx'
 import { IpodClassic } from './Ipod'
 import { usePlayback } from './playback'
 import { QuotesSection } from './Quotes'
-import { RoveDemo } from './demos/Rove'
-import { VectorDemo } from './demos/Vector'
-import { LeakLensDemo } from './demos/LeakLens'
 import { EMAIL, FEATURED, GITHUB, LINKEDIN, NAV } from './content'
 import { Link, navigate, usePath } from './router'
 import { About, CaseStudy, Contact, Home, NotFound, OpenSource, Work } from './pages'
+import { copyEmail } from './ui'
 
 export type Theme = 'light' | 'dark'
 
@@ -23,6 +21,7 @@ function useTheme(): [Theme, (o?: Origin) => void] {
     document.querySelector('meta[name="theme-color"]')?.setAttribute('content', theme === 'dark' ? '#111110' : '#f6f5f1')
   }, [theme])
   const toggle = (o?: Origin) => {
+    playThemeSwitch()
     const root = document.documentElement
     const next: Theme = root.dataset.theme === 'dark' ? 'light' : 'dark'
     try {
@@ -87,15 +86,13 @@ function ThemeToggle({ theme, onToggle }: { theme: Theme; onToggle: (o?: Origin)
   )
 }
 
-const CAPTURE: Record<string, (p: { theme: Theme }) => JSX.Element> = { rove: RoveDemo, vector: VectorDemo, leaklens: LeakLensDemo }
-
 const JUMP: Record<string, string> = { h: '/', ...Object.fromEntries(NAV.map((n) => [n.key, n.path])) }
 const openTab = (href: string) => window.open(href, '_blank', 'noopener')
 
-function Route({ path, theme, time, asleep }: { path: string; theme: Theme; time: string; asleep: boolean }) {
+function Route({ path, time, asleep }: { path: string; time: string; asleep: boolean }) {
   if (path === '/') return <Home time={time} />
-  if (path === '/work') return <Work theme={theme} />
-  if (path.startsWith('/work/')) return <CaseStudy slug={path.slice(6)} theme={theme} />
+  if (path === '/work') return <Work />
+  if (path.startsWith('/work/')) return <CaseStudy slug={path.slice(6)} />
   if (path === '/open-source') return <OpenSource />
   if (path === '/about') return <About />
   if (path === '/contact') return <Contact time={time} asleep={asleep} />
@@ -168,7 +165,7 @@ function Page() {
         group: 'Actions',
         label: 'Copy email address',
         keywords: EMAIL,
-        run: () => navigator.clipboard?.writeText(EMAIL).then(() => toast('Email copied to clipboard')),
+        run: copyEmail,
       },
       { id: 'mail', group: 'Actions', label: 'Write an email', keywords: 'contact mail', run: () => (location.href = `mailto:${EMAIL}`) },
       { id: 'gh', group: 'Links', label: 'GitHub', hint: '↗', run: () => openTab(GITHUB) },
@@ -208,7 +205,7 @@ function Page() {
               </svg>
               <kbd>{isMac ? '⌘' : 'Ctrl'} K</kbd>
             </button>
-            <ThemeToggle theme={theme} onToggle={(origin) => { playTactile('click'); toggleTheme(origin) }} />
+            <ThemeToggle theme={theme} onToggle={toggleTheme} />
           </div>
         </div>
         <div className="subnav">
@@ -221,7 +218,7 @@ function Page() {
       </nav>
 
       <main id="main" key={path} className={`page route${path === '/' ? '' : ' page--inner'}`}>
-        <Route path={path} theme={theme} time={time} asleep={asleep} />
+        <Route path={path} time={time} asleep={asleep} />
       </main>
 
       <QuotesSection />
@@ -256,17 +253,6 @@ function Page() {
   )
 }
 
-function CaptureView({ Demo }: { Demo: (p: { theme: Theme }) => JSX.Element }) {
-  const [theme] = useTheme()
-  return (
-    <div style={{ maxWidth: 680, margin: '40px auto', padding: '0 16px' }}>
-      <Demo theme={theme} />
-    </div>
-  )
-}
-
 export default function App() {
-  const capture = new URLSearchParams(location.search).get('capture')
-  const Captured = capture ? CAPTURE[capture] : undefined
-  return Captured ? <CaptureView Demo={Captured} /> : <Page />
+  return <Page />
 }

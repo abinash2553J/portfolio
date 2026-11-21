@@ -1,13 +1,10 @@
-import type { Theme } from './App'
 import { useEffect, useState } from 'react'
 import { JapanBadgeSticker, LuffyHatSticker } from 'stick-it-up'
 import { EMAIL, FEATURED, GITHUB, LINKEDIN, MORE } from './content'
 import { cleanTitle, usePRs, type PR } from './github'
 import { Link } from './router'
 import { Arrow, CopyEmail, PageHead, Section, useTitle } from './ui'
-import { usePlayback } from './playback'
 import { playTactile, toast } from './fx'
-import { EntropyLab } from './EntropyLab'
 
 const ext = { target: '_blank', rel: 'noreferrer' }
 const num = (i: number) => String(i + 1).padStart(2, '0')
@@ -59,13 +56,6 @@ function PRList({ items }: { items: PR[] }) {
 export function Home({ time }: { time: string }) {
   useTitle()
   const { prs } = usePRs()
-  const playback = usePlayback()
-  const [currentIndex, setCurrentIndex] = useState(0)
-  useEffect(() => {
-    if (playback.playing) return
-    const timer = setInterval(() => setCurrentIndex((index) => (index + 1) % 2), 5000)
-    return () => clearInterval(timer)
-  }, [playback.playing])
   return (
     <>
       <header className="hero">
@@ -86,7 +76,6 @@ export function Home({ time }: { time: string }) {
             Odisha, India <span className="sep">·</span> {time} IST
           </span>
           <span className="status"><span className="status__dot" />Open to SWE internships</span>
-          <span className="currently-pill" aria-live="off"><span className="currently-pill__label">Currently</span><span key={playback.playing ? playback.track?.title : currentIndex} className="currently-pill__value">{playback.playing && playback.track ? `Listening to: ${playback.track.title}` : currentIndex === 0 ? 'Reading: Designing Data-Intensive Applications' : 'Building: Systems & ML'}</span></span>
         </div>
         <div className="hero__links">
           <a href={GITHUB} {...ext}>
@@ -138,7 +127,7 @@ export function Home({ time }: { time: string }) {
 
 /* ---------- Work ---------- */
 
-export function Work({ theme }: { theme: Theme }) {
+export function Work() {
   useTitle('Work')
   return (
     <>
@@ -146,11 +135,8 @@ export function Work({ theme }: { theme: Theme }) {
         Three products I designed and built end to end, and the engineering decisions behind them.
       </PageHead>
       <div className="work">
-        {FEATURED.map(({ slug, name, kind, summary, stack, links, Demo }, i) => (
+        {FEATURED.map(({ slug, name, kind, summary, stack, links }, i) => (
           <article key={slug} className="project" data-reveal>
-            <div className="project__visual">
-              <Demo theme={theme} />
-            </div>
             <div className="project__body">
               <div className="project__head">
                 <h2 className="project__title">
@@ -179,7 +165,7 @@ export function Work({ theme }: { theme: Theme }) {
       <div className="more" data-reveal>
         <p className="label more__label">Also</p>
         {MORE.map((p) => (
-          <div key={p.name} className="more__row" tabIndex={0}>
+          <div key={p.name} className="more__row">
             <div className="more__title">
               {p.href ? (
                 <a href={p.href} {...ext} className="more__name">
@@ -197,10 +183,6 @@ export function Work({ theme }: { theme: Theme }) {
             </div>
             <p className="more__summary">{p.summary}</p>
             <p className="more__stack">{p.stack}</p>
-            <div className="more__preview" aria-hidden="true">
-              <div className="more__preview-chrome"><i /><i /><i /><span>{p.name.toLowerCase()} / overview</span></div>
-              <div className="more__preview-body"><strong>{p.name}</strong><span>{p.kind}</span><em>{p.stack.split(' · ').slice(0, 3).join(' · ')}</em></div>
-            </div>
           </div>
         ))}
       </div>
@@ -210,14 +192,13 @@ export function Work({ theme }: { theme: Theme }) {
 
 /* ---------- Case study ---------- */
 
-export function CaseStudy({ slug, theme }: { slug: string; theme: Theme }) {
+export function CaseStudy({ slug }: { slug: string }) {
   const i = FEATURED.findIndex((f) => f.slug === slug)
   const f = FEATURED[i]
   useTitle(f?.name ?? 'Not found')
   if (!f) return <NotFound />
   const prev = FEATURED[(i - 1 + FEATURED.length) % FEATURED.length]
   const next = FEATURED[(i + 1) % FEATURED.length]
-  const { Demo } = f
   return (
     <article className="case">
       <Link to="/work" className="back">
@@ -242,10 +223,6 @@ export function CaseStudy({ slug, theme }: { slug: string; theme: Theme }) {
           </dd>
         </div>
       </dl>
-      <div className="case__visual">
-        <Demo theme={theme} />
-      </div>
-      {slug === 'leaklens' && <EntropyLab />}
       <Section label="What it does">
         <ul className="points">
           {f.built.map((b, j) => (

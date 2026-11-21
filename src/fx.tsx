@@ -7,6 +7,19 @@ export const toast = (msg: string) => listeners.forEach((l) => l(msg))
 
 /* ---------- Tiny Web Audio feedback: created only after a user gesture ---------- */
 let tactileContext: AudioContext | null = null
+let themeSwitchAudio: HTMLAudioElement | null = null
+
+export function playThemeSwitch() {
+  try {
+    themeSwitchAudio ??= new Audio('/audio/theme-switch.mp3')
+    themeSwitchAudio.currentTime = 0
+    themeSwitchAudio.volume = 0.55
+    void themeSwitchAudio.play().catch(() => {})
+  } catch {
+    // Theme switching must work even if audio playback is unavailable.
+  }
+}
+
 export function playTactile(kind: 'click' | 'pop' | 'tick' = 'click') {
   if (typeof window === 'undefined' || !('AudioContext' in window)) return
   try {

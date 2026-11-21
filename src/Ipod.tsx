@@ -69,7 +69,6 @@ export function IpodClassic({ open, onClose }: { open: boolean; onClose: () => v
     const audio = new Audio()
     audio.preload = 'none'
     audio.src = PLAYLIST[songIdx].src
-    audio.volume = volume
     audioRef.current = audio
 
     const onTimeUpdate = () => {
@@ -91,10 +90,6 @@ export function IpodClassic({ open, onClose }: { open: boolean; onClose: () => v
     audio.addEventListener('timeupdate', onTimeUpdate)
     audio.addEventListener('loadedmetadata', onLoadedMetadata)
     audio.addEventListener('ended', onEnded)
-
-    if (playing) {
-      audio.play().catch(() => setPlaying(false))
-    }
 
     return () => {
       audio.pause()

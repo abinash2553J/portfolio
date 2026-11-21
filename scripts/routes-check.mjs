@@ -39,8 +39,6 @@ await p.waitForTimeout(600)
 console.log('palette vector ->', new URL(p.url()).pathname)
 await p.keyboard.type('hire'); await p.waitForTimeout(600)
 console.log('hire ->', new URL(p.url()).pathname)
-const cap = await p.goto(base + '/?capture=rove'); await p.waitForTimeout(500)
-console.log('capture ok:', !!(await p.$('.ss-stage')))
 console.log('errors:', errs.length ? errs : 'none')
 await b.close()
 function document_title(t) { return t }

@@ -17,7 +17,6 @@ npm run build    # static site in dist/
 - `src/github.ts` — the Open source page's pull requests, fetched live from the GitHub search API; `src/prs.json` is the
   fallback snapshot (`node scripts/prs.mjs` refreshes it).
 - `src/meta.ts` — per-page titles, descriptions and share-image names.
-- `src/demos/` — the animated product demos, built with the Stageshow kit in `src/kit/`.
 - `vite.config.ts` — at build time writes a static `index.html` per route with its own link-preview tags, plus `sitemap.xml` and `robots.txt`.
 
 ## Deploy

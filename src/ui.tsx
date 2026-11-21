@@ -5,6 +5,21 @@ import { fullTitle, pageMeta, PAGES } from './meta'
 
 const setMeta = (sel: string, value: string) => document.querySelector(sel)?.setAttribute('content', value)
 
+export async function copyEmail() {
+  if (!navigator.clipboard) {
+    toast('Clipboard unavailable')
+    return false
+  }
+  try {
+    await navigator.clipboard.writeText(EMAIL)
+    toast('Email copied to clipboard')
+    return true
+  } catch {
+    toast('Could not copy email')
+    return false
+  }
+}
+
 export function useTitle(title?: string) {
   useEffect(() => {
     const t = fullTitle(title)
@@ -30,12 +45,11 @@ export function CopyEmail() {
   return (
     <button
       className="copy"
-      onClick={() => {
-        navigator.clipboard?.writeText(EMAIL).then(() => {
-          toast('Email copied to clipboard')
+      onClick={async () => {
+        if (await copyEmail()) {
           setCopied(true)
           setTimeout(() => setCopied(false), 1800)
-        })
+        }
       }}
     >
       <span className="copy__email">{EMAIL}</span>
