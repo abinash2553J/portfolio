@@ -38,7 +38,7 @@ export function Toaster() {
 export function useReveal(key: string) {
   useEffect(() => {
     const els = Array.from(document.querySelectorAll<HTMLElement>('[data-reveal]'))
-    if (!('IntersectionObserver' in window)) {
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) {
       els.forEach((el) => (el.dataset.shown = ''))
       return
     }
