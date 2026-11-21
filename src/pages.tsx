@@ -1,11 +1,12 @@
 import type { Theme } from './App'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { JapanBadgeSticker, LuffyHatSticker } from 'stick-it-up'
 import { EMAIL, FEATURED, GITHUB, LINKEDIN, MORE } from './content'
 import { cleanTitle, usePRs, type PR } from './github'
 import { Link } from './router'
 import { Arrow, CopyEmail, PageHead, Section, useTitle } from './ui'
 import { usePlayback } from './playback'
+import { toast } from './fx'
 
 const ext = { target: '_blank', rel: 'noreferrer' }
 const num = (i: number) => String(i + 1).padStart(2, '0')
@@ -406,24 +407,33 @@ export function Contact({ time, asleep }: { time: string; asleep: boolean }) {
 
 export function NotFound() {
   useTitle('Not found')
+  const [hits, setHits] = useState(0)
+  useEffect(() => {
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.code !== 'Space' || event.repeat) return
+      const target = event.target
+      if (target instanceof HTMLElement && (target.isContentEditable || ['INPUT', 'TEXTAREA'].includes(target.tagName))) return
+      event.preventDefault()
+      setHits((value) => Math.min(5, value + 1))
+    }
+    window.addEventListener('keydown', onKeyDown)
+    return () => window.removeEventListener('keydown', onKeyDown)
+  }, [])
+  useEffect(() => {
+    if (hits === 5) toast('Victory. The duel is yours.')
+  }, [hits])
+  const fight = () => setHits((value) => value >= 5 ? 0 : value + 1)
   return (
     <div className="notfound">
-      <div className="notfound__top">
-        <div>
-          <p className="label">404</p>
-          <h1 className="pagehead__title">This page wandered off.</h1>
-          <p className="pagehead__intro">
-            <code>{location.pathname}</code> doesn&rsquo;t exist. Try the <Link to="/">home page</Link>, or press <kbd>/</kbd> to search.
-          </p>
-        </div>
-        <div className="notfound__sticker" title="Peel Luffy's straw hat!">
-          <LuffyHatSticker size={100} peel />
+      <div className="duel-game" data-hits={hits}>
+        <figure className="duel">
+          <img src="/art/duel.gif" alt="Pixel-art Luffy and Crocodile fighting" width={400} height={300} />
+          <figcaption>Meanwhile, Luffy is settling it the old-fashioned way.</figcaption>
+        </figure>
+        <div className="duel-game__panel">
+          <div className="duel-game__score"><span>DUEL PROGRESS</span><strong>{hits === 5 ? 'Victory' : `${hits} / 5 hits`}</strong></div>
+          <div className="duel-game__health" role="meter" aria-label="Crocodile's remaining health" aria-valuemin={0} aria-valuemax={5} aria-valuenow={5 - hits}><span style={{ width: `${(5 - hits) * 20}%` }} /></div>
+          <button className="duel-game__fight" type="button" onClick={fight}>{hits === 5 ? 'Fight again' : 'Fight!'}</button>
+          <p>Press <kbd>Space</kbd> or click Fight. Five hits to win.</p>
         </div>
       </div>
-      <figure className="duel">
-        <img src="/art/duel.gif" alt="Pixel-art Luffy and Crocodile fighting" width={400} height={300} />
-        <figcaption>Meanwhile, Luffy is settling it the old-fashioned way.</figcaption>
-      </figure>
-    </div>
-  )
-}
