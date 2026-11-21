@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { QUOTES } from './content'
 
 const prefersReducedMotion = () => typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -19,7 +19,7 @@ export function QuotesSection() {
     return () => media.removeEventListener('change', onChange)
   }, [])
 
-  const changeQuote = (nextIdx: number) => {
+  const changeQuote = useCallback((nextIdx: number) => {
     if (fading) return
     if (reduced) { setIndex((nextIdx + QUOTES.length) % QUOTES.length); return }
     setFading(true)
@@ -27,7 +27,7 @@ export function QuotesSection() {
       setIndex((nextIdx + QUOTES.length) % QUOTES.length)
       setFading(false)
     }, 220)
-  }
+  }, [fading, reduced])
 
   const next = () => changeQuote(index + 1)
   const prev = () => changeQuote(index - 1)
@@ -38,7 +38,7 @@ export function QuotesSection() {
       changeQuote(index + 1)
     }, 8000)
     return () => clearInterval(id)
-  }, [index, isPaused, reduced, fading])
+  }, [index, isPaused, reduced, changeQuote])
 
   const current = QUOTES[index]
   const num = String(index + 1).padStart(2, '0')
