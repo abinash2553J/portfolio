@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react'
 import { QUOTES } from './content'
 
+const prefersReducedMotion = () => typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches
+
 export function QuotesSection() {
   const [index, setIndex] = useState(0)
   const [fading, setFading] = useState(false)
@@ -8,6 +10,7 @@ export function QuotesSection() {
 
   const changeQuote = (nextIdx: number) => {
     if (fading) return
+    if (prefersReducedMotion()) { setIndex((nextIdx + QUOTES.length) % QUOTES.length); return }
     setFading(true)
     setTimeout(() => {
       setIndex((nextIdx + QUOTES.length) % QUOTES.length)
@@ -17,15 +20,9 @@ export function QuotesSection() {
 
   const next = () => changeQuote(index + 1)
   const prev = () => changeQuote(index - 1)
-  const random = () => {
-    let r = Math.floor(Math.random() * QUOTES.length)
-    if (r === index) r = (r + 1) % QUOTES.length
-    changeQuote(r)
-  }
-
-  // Auto-rotate every 8 seconds, paused on hover
+  // Auto-rotate every 8 seconds, paused on hover, focus, or explicit pause
   useEffect(() => {
-    if (paused) return
+    if (paused || prefersReducedMotion()) return
     const id = setInterval(() => {
       changeQuote(index + 1)
     }, 8000)
@@ -42,6 +39,8 @@ export function QuotesSection() {
       aria-label="Quotes on systems and life"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
+      onFocusCapture={() => setPaused(true)}
+      onBlurCapture={(e) => { if (!e.currentTarget.contains(e.relatedTarget as Node)) setPaused(false) }}
     >
       <div className="quotes__inner">
         <div className="quotes__head">
@@ -69,16 +68,7 @@ export function QuotesSection() {
             >
               →
             </button>
-            <button
-              className="quotes__btn quotes__btn--shuffle"
-              onClick={random}
-              aria-label="Random quote"
-              title="Random quote"
-            >
-              <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                <path d="M11 2h3v3M14 2l-5 5M11 14h3v-3M14 14l-5-5M2 2l4 4M2 14l4-4" />
-              </svg>
-            </button>
+            <button className="quotes__btn" onClick={() => setPaused((p) => !p)} aria-label={paused ? 'Resume quote rotation' : 'Pause quote rotation'} title={paused ? 'Resume rotation' : 'Pause rotation'}>{paused ? '▶' : 'Ⅱ'}</button>
           </div>
         </div>
 
