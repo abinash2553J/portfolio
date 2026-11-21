@@ -5,6 +5,7 @@ import { EMAIL, FEATURED, GITHUB, LINKEDIN, MORE } from './content'
 import { cleanTitle, usePRs, type PR } from './github'
 import { Link } from './router'
 import { Arrow, CopyEmail, PageHead, Section, useTitle } from './ui'
+import { usePlayback } from './playback'
 
 const ext = { target: '_blank', rel: 'noreferrer' }
 const num = (i: number) => String(i + 1).padStart(2, '0')
@@ -56,13 +57,14 @@ function PRList({ items }: { items: PR[] }) {
 export function Home({ time }: { time: string }) {
   useTitle()
   const { prs } = usePRs()
+  const playback = usePlayback()
   return (
     <>
       <header className="hero">
         <div className="hero__row">
           <div className="hero__intro">
             <h1 className="hero__name">Abinash Karan</h1>
-            <p className="hero__role">Software Engineer · AI &amp; Systems</p>
+            <p className="hero__role">Software Engineering Student · AI &amp; Systems</p>
           </div>
           <div className="hero__sticker" title="Peel the Japan badge!">
             <JapanBadgeSticker size={100} peel />
@@ -75,10 +77,7 @@ export function Home({ time }: { time: string }) {
           <span className="meta">
             Odisha, India <span className="sep">·</span> {time} IST
           </span>
-          <span className="status">
-            <span className="status__dot" />
-            Open to SWE internships
-          </span>
+          <span className="status"><span className="status__dot" />{playback.playing && playback.track ? `Listening to: ${playback.track.title}` : 'Currently: Reading DDIA · Building systems & ML'}</span>
         </div>
         <div className="hero__links">
           <a href={GITHUB} {...ext}>
@@ -171,7 +170,7 @@ export function Work({ theme }: { theme: Theme }) {
       <div className="more" data-reveal>
         <p className="label more__label">Also</p>
         {MORE.map((p) => (
-          <div key={p.name} className="more__row">
+          <div key={p.name} className="more__row" tabIndex={0} data-preview-name={p.name} data-preview-kind={p.kind} data-preview-summary={p.summary} data-preview-stack={p.stack}>
             <div className="more__title">
               {p.href ? (
                 <a href={p.href} {...ext} className="more__name">
