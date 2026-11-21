@@ -116,7 +116,6 @@ export function useKeys(h: { palette: () => void; theme: () => void; sakura: () 
       if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
         e.preventDefault()
         playTactile('pop')
-        playTactile('pop')
         ref.current.palette()
         return
       }
