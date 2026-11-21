@@ -5,6 +5,31 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 const listeners = new Set<(msg: string) => void>()
 export const toast = (msg: string) => listeners.forEach((l) => l(msg))
 
+/* ---------- Tiny Web Audio feedback: created only after a user gesture ---------- */
+let tactileContext: AudioContext | null = null
+export function playTactile(kind: 'click' | 'pop' | 'tick' = 'click') {
+  if (typeof window === 'undefined' || !('AudioContext' in window)) return
+  try {
+    tactileContext ??= new AudioContext()
+    const context = tactileContext
+    if (context.state === 'suspended') void context.resume()
+    const now = context.currentTime
+    const oscillator = context.createOscillator()
+    const gain = context.createGain()
+    const duration = kind === 'pop' ? 0.045 : kind === 'tick' ? 0.012 : 0.009
+    oscillator.type = kind === 'pop' ? 'triangle' : 'sine'
+    oscillator.frequency.setValueAtTime(kind === 'tick' ? 390 : kind === 'pop' ? 720 : 560, now)
+    oscillator.frequency.exponentialRampToValueAtTime(kind === 'pop' ? 960 : 230, now + duration)
+    gain.gain.setValueAtTime(0.055, now)
+    gain.gain.exponentialRampToValueAtTime(0.0001, now + duration)
+    oscillator.connect(gain).connect(context.destination)
+    oscillator.start(now)
+    oscillator.stop(now + duration + 0.002)
+  } catch {
+    // Audio feedback must never block or break a normal interaction.
+  }
+}
+
 export function Toaster() {
   const [msg, setMsg] = useState<string | null>(null)
   const [key, setKey] = useState(0)
@@ -38,7 +63,7 @@ export function Toaster() {
 export function useReveal(key: string) {
   useEffect(() => {
     const els = Array.from(document.querySelectorAll<HTMLElement>('[data-reveal]'))
-    if (!('IntersectionObserver' in window)) {
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) {
       els.forEach((el) => (el.dataset.shown = ''))
       return
     }
@@ -90,12 +115,14 @@ export function useKeys(h: { palette: () => void; theme: () => void; sakura: () 
     const onKey = (e: KeyboardEvent) => {
       if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
         e.preventDefault()
+        playTactile('pop')
         ref.current.palette()
         return
       }
       if (typing(e.target) || e.metaKey || e.ctrlKey || e.altKey) return
       if (e.key === '/' || e.key === '?') {
         e.preventDefault()
+        playTactile('pop')
         ref.current.palette()
         return
       }
@@ -121,6 +148,7 @@ export function useKeys(h: { palette: () => void; theme: () => void; sakura: () 
         buf = ''
         ref.current.secret(word)
       } else if (e.key === 't') {
+        playTactile('click')
         ref.current.theme()
       }
     }
@@ -288,6 +316,7 @@ export function Palette({ open, onClose, commands }: { open: boolean; onClose: (
 
   const run = (c?: Command) => {
     if (!c) return
+    playTactile('click')
     onClose()
     requestAnimationFrame(() => c.run())
   }

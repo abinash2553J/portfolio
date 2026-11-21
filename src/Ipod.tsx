@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import './ipod.css'
+import { publishPlayback } from './playback'
+import { playTactile } from './fx'
 
 /* ---------- Data ---------- */
 
@@ -49,7 +51,7 @@ const fmtTime = (s: number) => {
 
 /* ---------- iPod Classic ---------- */
 
-export function IpodClassic({ onClose }: { onClose: () => void }) {
+export function IpodClassic({ open, onClose }: { open: boolean; onClose: () => void }) {
   const [screen, setScreen] = useState<Screen>('menu')
   const [menuSel, setMenuSel] = useState(0)
   const [songSel, setSongSel] = useState(0)
@@ -64,7 +66,9 @@ export function IpodClassic({ onClose }: { onClose: () => void }) {
 
   // Initialize and manage real audio playback
   useEffect(() => {
-    const audio = new Audio(PLAYLIST[songIdx].src)
+    const audio = new Audio()
+    audio.preload = 'none'
+    audio.src = PLAYLIST[songIdx].src
     audio.volume = volume
     audioRef.current = audio
 
@@ -114,6 +118,12 @@ export function IpodClassic({ onClose }: { onClose: () => void }) {
     }
   }, [playing])
 
+  useEffect(() => {
+    publishPlayback(playing, playing ? PLAYLIST[songIdx] : null)
+  }, [playing, songIdx])
+
+  useEffect(() => () => publishPlayback(false, null), [])
+
   // Volume change
   useEffect(() => {
     if (audioRef.current) {
@@ -146,6 +156,7 @@ export function IpodClassic({ onClose }: { onClose: () => void }) {
   }, [])
 
   const wheelTick = useCallback((dir: number) => {
+    playTactile('tick')
     doFlash()
     if (screen === 'menu') {
       setMenuSel((s) => Math.max(0, Math.min(MAIN_MENU.length - 1, s + dir)))
@@ -183,6 +194,7 @@ export function IpodClassic({ onClose }: { onClose: () => void }) {
 
   // Keyboard navigation
   useEffect(() => {
+    if (!open) return
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         onClose()
@@ -219,7 +231,7 @@ export function IpodClassic({ onClose }: { onClose: () => void }) {
     }
     addEventListener('keydown', onKey)
     return () => removeEventListener('keydown', onKey)
-  }, [wheelTick, selectAction, goBack, nextSong, prevSong, screen, onClose])
+  }, [open, wheelTick, selectAction, goBack, nextSong, prevSong, screen, onClose])
 
   // Click-wheel rotation tracking
   const wheelRef = useRef<HTMLDivElement>(null)
@@ -297,7 +309,7 @@ export function IpodClassic({ onClose }: { onClose: () => void }) {
 
   const song = PLAYLIST[songIdx]
 
-  return (
+  return open ? (
     <div
       className="ipod-overlay"
       onMouseDown={(e) => {
@@ -435,5 +447,5 @@ export function IpodClassic({ onClose }: { onClose: () => void }) {
         </div>
       </div>
     </div>
-  )
+  ) : null
 }

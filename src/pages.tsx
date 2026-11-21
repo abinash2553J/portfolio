@@ -1,10 +1,13 @@
 import type { Theme } from './App'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { JapanBadgeSticker, LuffyHatSticker } from 'stick-it-up'
 import { EMAIL, FEATURED, GITHUB, LINKEDIN, MORE } from './content'
 import { cleanTitle, usePRs, type PR } from './github'
 import { Link } from './router'
 import { Arrow, CopyEmail, PageHead, Section, useTitle } from './ui'
+import { usePlayback } from './playback'
+import { playTactile, toast } from './fx'
+import { EntropyLab } from './EntropyLab'
 
 const ext = { target: '_blank', rel: 'noreferrer' }
 const num = (i: number) => String(i + 1).padStart(2, '0')
@@ -56,13 +59,20 @@ function PRList({ items }: { items: PR[] }) {
 export function Home({ time }: { time: string }) {
   useTitle()
   const { prs } = usePRs()
+  const playback = usePlayback()
+  const [currentIndex, setCurrentIndex] = useState(0)
+  useEffect(() => {
+    if (playback.playing) return
+    const timer = setInterval(() => setCurrentIndex((index) => (index + 1) % 2), 5000)
+    return () => clearInterval(timer)
+  }, [playback.playing])
   return (
     <>
       <header className="hero">
         <div className="hero__row">
           <div className="hero__intro">
             <h1 className="hero__name">Abinash Karan</h1>
-            <p className="hero__role">Software Engineer · AI &amp; Systems</p>
+            <p className="hero__role">Software Engineering Student · AI &amp; Systems</p>
           </div>
           <div className="hero__sticker" title="Peel the Japan badge!">
             <JapanBadgeSticker size={100} peel />
@@ -75,10 +85,8 @@ export function Home({ time }: { time: string }) {
           <span className="meta">
             Odisha, India <span className="sep">·</span> {time} IST
           </span>
-          <span className="status">
-            <span className="status__dot" />
-            Open to SWE internships
-          </span>
+          <span className="status"><span className="status__dot" />Open to SWE internships</span>
+          <span className="currently-pill" aria-live="off"><span className="currently-pill__label">Currently</span><span key={playback.playing ? playback.track?.title : currentIndex} className="currently-pill__value">{playback.playing && playback.track ? `Listening to: ${playback.track.title}` : currentIndex === 0 ? 'Reading: Designing Data-Intensive Applications' : 'Building: Systems & ML'}</span></span>
         </div>
         <div className="hero__links">
           <a href={GITHUB} {...ext}>
@@ -171,7 +179,7 @@ export function Work({ theme }: { theme: Theme }) {
       <div className="more" data-reveal>
         <p className="label more__label">Also</p>
         {MORE.map((p) => (
-          <div key={p.name} className="more__row">
+          <div key={p.name} className="more__row" tabIndex={0}>
             <div className="more__title">
               {p.href ? (
                 <a href={p.href} {...ext} className="more__name">
@@ -189,6 +197,10 @@ export function Work({ theme }: { theme: Theme }) {
             </div>
             <p className="more__summary">{p.summary}</p>
             <p className="more__stack">{p.stack}</p>
+            <div className="more__preview" aria-hidden="true">
+              <div className="more__preview-chrome"><i /><i /><i /><span>{p.name.toLowerCase()} / overview</span></div>
+              <div className="more__preview-body"><strong>{p.name}</strong><span>{p.kind}</span><em>{p.stack.split(' · ').slice(0, 3).join(' · ')}</em></div>
+            </div>
           </div>
         ))}
       </div>
@@ -233,6 +245,7 @@ export function CaseStudy({ slug, theme }: { slug: string; theme: Theme }) {
       <div className="case__visual">
         <Demo theme={theme} />
       </div>
+      {slug === 'leaklens' && <EntropyLab />}
       <Section label="What it does">
         <ul className="points">
           {f.built.map((b, j) => (
@@ -402,6 +415,23 @@ export function Contact({ time, asleep }: { time: string; asleep: boolean }) {
 
 export function NotFound() {
   useTitle('Not found')
+  const [hits, setHits] = useState(0)
+  useEffect(() => {
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.code !== 'Space' || event.repeat) return
+      const target = event.target
+      if (target instanceof HTMLElement && (target.isContentEditable || ['INPUT', 'TEXTAREA'].includes(target.tagName))) return
+      event.preventDefault()
+      playTactile('click')
+      setHits((value) => Math.min(5, value + 1))
+    }
+    window.addEventListener('keydown', onKeyDown)
+    return () => window.removeEventListener('keydown', onKeyDown)
+  }, [])
+  useEffect(() => {
+    if (hits === 5) toast('Victory. The duel is yours.')
+  }, [hits])
+  const fight = () => { playTactile('click'); setHits((value) => value >= 5 ? 0 : value + 1) }
   return (
     <div className="notfound">
       <div className="notfound__top">
@@ -416,10 +446,18 @@ export function NotFound() {
           <LuffyHatSticker size={100} peel />
         </div>
       </div>
-      <figure className="duel">
-        <img src="/art/duel.gif" alt="Pixel-art Luffy and Crocodile fighting" width={400} height={300} />
-        <figcaption>Meanwhile, Luffy is settling it the old-fashioned way.</figcaption>
-      </figure>
+      <div className="duel-game" data-hits={hits}>
+        <figure className="duel">
+          <img key={hits} src="/art/duel.gif" alt="Pixel-art Luffy and Crocodile fighting" width={400} height={300} />
+          <figcaption>Meanwhile, Luffy is settling it the old-fashioned way.</figcaption>
+        </figure>
+        <div className="duel-game__panel">
+          <div className="duel-game__score"><span>DUEL PROGRESS</span><strong>{hits === 5 ? 'Victory' : `${hits} / 5 hits`}</strong></div>
+          <div className="duel-game__health" role="meter" aria-label="Crocodile's remaining health" aria-valuemin={0} aria-valuemax={5} aria-valuenow={5 - hits}><span style={{ width: `${(5 - hits) * 20}%` }} /></div>
+          <button className="duel-game__fight" type="button" onClick={fight}>{hits === 5 ? 'Fight again' : 'Fight!'}</button>
+          <p>Press <kbd>Space</kbd> or click Fight. Five hits to win.</p>
+        </div>
+      </div>
     </div>
   )
 }
