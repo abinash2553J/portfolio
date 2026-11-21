@@ -60,6 +60,12 @@ export function Home({ time }: { time: string }) {
   useTitle()
   const { prs } = usePRs()
   const playback = usePlayback()
+  const [currentIndex, setCurrentIndex] = useState(0)
+  useEffect(() => {
+    if (playback.playing) return
+    const timer = setInterval(() => setCurrentIndex((index) => (index + 1) % 2), 5000)
+    return () => clearInterval(timer)
+  }, [playback.playing])
   return (
     <>
       <header className="hero">
@@ -80,7 +86,7 @@ export function Home({ time }: { time: string }) {
             Odisha, India <span className="sep">·</span> {time} IST
           </span>
           <span className="status"><span className="status__dot" />Open to SWE internships</span>
-          <span className="currently-pill"><span className="currently-pill__label">Currently</span>{playback.playing && playback.track ? `Listening to: ${playback.track.title}` : 'Reading DDIA · Building systems & ML'}</span>
+          <span className="currently-pill" aria-live="off"><span className="currently-pill__label">Currently</span><span key={playback.playing ? playback.track?.title : currentIndex} className="currently-pill__value">{playback.playing && playback.track ? `Listening to: ${playback.track.title}` : currentIndex === 0 ? 'Reading: Designing Data-Intensive Applications' : 'Building: Systems & ML'}</span></span>
         </div>
         <div className="hero__links">
           <a href={GITHUB} {...ext}>
